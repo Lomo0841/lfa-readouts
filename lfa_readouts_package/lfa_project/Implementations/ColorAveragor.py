@@ -8,15 +8,13 @@ class ColorAveragor():
 
         cv.drawContours(mask, [contour], 0, 255, -1)
 
-        cv.imshow("hej2", mask)
-
         masked_img = cv.bitwise_and(image, image, mask=mask)
 
         avg_color = cv.mean(masked_img, mask=mask)
 
-        cv.imshow("hej", masked_img)
+        #SHOULD BE MOVED TO A PRINTER CLASS
         print(avg_color)
 
-    def averageColor():
-        pass
+    def averageColor(self, image, contour):
+        self.binaryMask(image, contour)
 

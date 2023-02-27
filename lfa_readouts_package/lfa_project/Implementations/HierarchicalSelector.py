@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import cv2 as cv
 from lfa_project.Interfaces.IContourSelector import IContourSelector
+import time as t
 
 class HierarchicalSelector(IContourSelector):
         
@@ -11,10 +12,21 @@ class HierarchicalSelector(IContourSelector):
         if len(contours) == 1:
             return contours[0]
         else:
-            self.selectOutermost(contours)
+            return self.selectOutermost(contours)
 
     def selectOutermost(self, contours):
+        """ largest_contour = None
+        largest_area = 0
+        for contour in contours:
+            area = cv.contourArea(contour)
+            if area > largest_area:
+                largest_area = area
+                largest_contour = contour
+      
+        return largest_contour """
+    
         contourAreas = map(lambda cnt : cv.contourArea(cnt), contours)
-        largestContour = np.argmax(contourAreas)
-        return contours[largestContour]
 
+        largestContour = np.argmax(list(contourAreas))
+
+        return contours[largestContour]

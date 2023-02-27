@@ -18,7 +18,7 @@ class FilterOnConditions(IContourFiltrator):
 
         pointFiltered = self.pointFilter(convexityDetectFiltered, points)
 
-        return convexityDetectFiltered
+        return pointFiltered
 
     #Where does it recieve the points from? 
     def pointFilter(self, contours, points) -> np.ndarray:

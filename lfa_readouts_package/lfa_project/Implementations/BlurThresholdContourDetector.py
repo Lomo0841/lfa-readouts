@@ -4,7 +4,8 @@ import pupil_apriltags as apriltag
 from lfa_project.Interfaces.IContourDetector import IContourDetector
 
 class BlurThresholdContourDetector(IContourDetector):
-       
+    
+    #Should return a list of pictures
     def detectContours(self, image) -> cv.Mat:
         blurredImage = self.blur(image)
 
