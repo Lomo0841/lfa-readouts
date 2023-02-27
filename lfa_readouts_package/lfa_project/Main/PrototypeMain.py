@@ -5,6 +5,7 @@ from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresho
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
 from lfa_project.Implementations.HierarchicalSelector import HierarchicalSelector
 from lfa_project.Implementations.ColorAveragor import ColorAveragor
+from lfa_project.Utility.Printing import Printing
 
 start = t.time()
 #Setting up input
@@ -13,11 +14,12 @@ input = cv.imread("lfa_project/Images/green.png")
 height, width = input.shape[:2]
 
 #Setting up instances
-extractor = AprilTagsExtractor()
-detector = BlurThresholdContourDetector()
-filtrator = FilterOnConditions()
-selector = HierarchicalSelector()
-averagor = ColorAveragor()
+printer = Printing()
+extractor = AprilTagsExtractor(printer)
+detector = BlurThresholdContourDetector(printer)
+filtrator = FilterOnConditions(printer)
+selector = HierarchicalSelector(printer)
+averagor = ColorAveragor(printer)
 
 #creating workflow
 roi = extractor.extractRois(input)
