@@ -3,12 +3,17 @@ import numpy as np
 
 class ColorAveragor():
 
+    def __init__(self, printer):
+        self.printer = printer
+
     def binaryMask(self, image, contour):
         mask = np.zeros(image.shape[:2], np.uint8)
 
         cv.drawContours(mask, [contour], 0, 255, -1)
 
         masked_img = cv.bitwise_and(image, image, mask=mask)
+
+        cv.imshow("masked", masked_img)
 
         avg_color = cv.mean(masked_img, mask=mask)
 

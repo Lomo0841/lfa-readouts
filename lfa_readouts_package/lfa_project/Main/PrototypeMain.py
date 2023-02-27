@@ -8,7 +8,8 @@ from lfa_project.Implementations.ColorAveragor import ColorAveragor
 
 start = t.time()
 #Setting up input
-input = cv.imread("lfa_project/Images/apriltagTemplate.png")
+input = cv.imread("lfa_project/Images/green.png")
+
 height, width = input.shape[:2]
 
 #Setting up instances
@@ -27,17 +28,17 @@ filtratedContours = filtrator.touchEdgeFilter(contours, height, width)
 
 selectedContour = selector.selectContour(filtratedContours)
 
-average = averagor.averageColor(input, selectedContour)
+average = averagor.averageColor(roi, selectedContour)
 
 end = t.time()
 
 print(end - start)
 
 #creating output
-cv.drawContours(input, selectedContour, -1, (0, 255, 0), 3)
+cv.drawContours(roi, selectedContour, -1, (0, 255, 0), 3)
 
 #printing results
-cv.imshow("result", input)
+cv.imshow("result", roi)
 print(average)
 
 cv.waitKey(0)

@@ -5,6 +5,9 @@ from lfa_project.Interfaces.IContourSelector import IContourSelector
 import time as t
 
 class HierarchicalSelector(IContourSelector):
+
+    def __init__(self, printer):
+        self.printer = printer
         
     def selectContour(self, contours) -> np.ndarray:
         if len(contours) == 0:
