@@ -11,10 +11,12 @@ from lfa_project.Utility.Printing import Printing
 start = t.time()
 #Setting up input
 
+image_name = "green.png"
+
 if platform.system() == 'Windows':
-    input = input = cv.imread("lfa_readouts_package\lfa_project\Images\circle.png")
+    input = cv.imread("lfa_readouts_package\lfa_project\Images\\" + image_name)
 else:
-    input = cv.imread("lfa_project/Images/circle.png")
+    input = cv.imread("lfa_project/Images/" + image_name)
 
 height, width = input.shape[:2]
 
