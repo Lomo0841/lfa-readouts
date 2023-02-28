@@ -8,18 +8,21 @@ from lfa_project.Interfaces.IContourFiltrator import IContourFiltrator
 #maybe every parameter in the constructor should be given as fields gotten from a config file
 class FilterOnConditions(IContourFiltrator):
 
-    def __init__(self, printer):
+    def __init__(self, printer, contours):
         self.printer = printer
+        self.contours = contours
     
-    def filterContours(self, contours, minArea, height, width, maxdepth, points) -> np.ndarray:
+    def filterContours(self, minArea, height, width, maxdepth, points) -> np.ndarray:
 
-        areafilterered = self.areaFilter(contours, minArea)
+        areafilterered = self.areaFilter(self.contours, minArea)
 
         touchEdgeFiltered = self.touchEdgeFilter(areafilterered, height, width)
 
         convexityDetectFiltered = self.convexityDetectFilter(touchEdgeFiltered, maxdepth)
 
         pointFiltered = self.pointFilter(convexityDetectFiltered, points)
+
+        self.printer.write_image(self.image, "FilteredContours", pointFiltered)
 
         return pointFiltered
 

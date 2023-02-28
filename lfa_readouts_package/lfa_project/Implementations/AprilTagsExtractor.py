@@ -6,23 +6,28 @@ import time as t
 
 class AprilTagsExtractor(IRoiExtractor):
 
-    def __init__(self, printer):
+    def __init__(self, printer, image):
         self.printer = printer
+        self.image = image
 
     #Remember to dewarp in 3d space
     #Can we use only one detection?
-    def extractRois(self, image) -> cv.Mat:
-        imageGreyScale = self.greyScale(image) 
-        
-        deWarped = self.deWarp(image, imageGreyScale)
+    def extractRois(self) -> cv.Mat:
 
-        greyScaleDewarped = self.greyScale(deWarped)
+        imageGreyScale = self.greyScale(self.image) 
+        
+        deWarped = self.deWarp(self.image, imageGreyScale)
+
+        #greyScaleDewarped = self.greyScale(deWarped)
         
         #cropped = self.cropRoi(deWarped, greyScaleDewarped)
+
+        self.printer.write_image(deWarped, "Roi")
 
         return deWarped
     
     def greyScale(self, image) -> cv.Mat:
+        
         greyScale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
         return greyScale

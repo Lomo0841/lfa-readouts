@@ -24,17 +24,23 @@ class Printing():
         
         self.folder_path = folder_path
 
-    def write_image(self, image):
+    def write_image(self, image, name, contours = None):
         if self.folder_path is None:
             raise ValueError("Folder not created. Call create_folder() method first.")
         
-        now = datetime.datetime.now()
+        if contours != None:
+            cv.drawContours(image, contours, -1, (0, 255, 0), 3)
 
-        picture_name = now.strftime("%Y%m%d%H%M%S%f") + ".png"
+        #now = datetime.datetime.now()
+
+        #picture_name = now.strftime("%Y%m%d%H%M%S%f") + ".png"
+
+        picture_name = name + ".png"
 
         img_path = os.path.join(self.folder_path, picture_name)
 
         cv.imwrite(img_path, image)
+        
         
     def write_file(self, message):
         if self.folder_path is None:

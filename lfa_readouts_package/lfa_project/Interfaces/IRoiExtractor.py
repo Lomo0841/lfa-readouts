@@ -4,5 +4,5 @@ import cv2 as cv
 class IRoiExtractor(ABC):
 
     @abstractmethod
-    def extractRois(self, image) -> cv.Mat:
+    def extractRois(self):
         pass

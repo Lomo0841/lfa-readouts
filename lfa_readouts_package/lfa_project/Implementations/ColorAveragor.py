@@ -3,23 +3,22 @@ import numpy as np
 
 class ColorAveragor():
 
-    def __init__(self, printer):
+    def __init__(self, printer, image, contour):
         self.printer = printer
+        self.image = image
+        self.contour = contour
 
-    def binaryMask(self, image, contour):
-        mask = np.zeros(image.shape[:2], np.uint8)
+    def averageColor(self):
+        mask = np.zeros(self.image.shape[:2], np.uint8)
 
-        cv.drawContours(mask, [contour], 0, 255, -1)
+        cv.drawContours(mask, [self.contour], 0, 255, -1)
 
-        masked_img = cv.bitwise_and(image, image, mask=mask)
+        masked_img = cv.bitwise_and(self.image, self.image, mask=mask)
 
         cv.imshow("masked", masked_img)
 
         avg_color = cv.mean(masked_img, mask=mask)
 
-        #SHOULD BE MOVED TO A PRINTER CLASS
-        print(avg_color)
+        self.printer.write_file(avg_color)
 
-    def averageColor(self, image, contour):
-        self.binaryMask(image, contour)
-
+        return avg_color

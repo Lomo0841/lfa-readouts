@@ -4,6 +4,6 @@ import cv2 as cv
 class IContourSelector(ABC):
 
     @abstractmethod
-    def selectContour(self, image) -> cv.Mat:
+    def selectContour(self):
         pass
     

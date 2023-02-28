@@ -5,19 +5,22 @@ from lfa_project.Interfaces.IContourDetector import IContourDetector
 
 class BlurThresholdContourDetector(IContourDetector):
 
-    def __init__(self, printer):
+    def __init__(self, printer, image):
         self.printer = printer
+        self.image = image
 
     
     #Should return a list of pictures
-    def detectContours(self, image) -> cv.Mat:
-        blurredImage = self.blur(image)
-
-        self.printer.write_file("testen")
+    def detectContours(self) -> cv.Mat:
+        blurredImage = self.blur(self.image)
 
         thresholdedImage = self.threshold(blurredImage)
 
+        self.printer.write_image(thresholdedImage, "ThresholdedImage")
+
         contours = self.findContours(thresholdedImage)
+
+        self.printer.write_image(self.image, "AllContours", contours)
 
         return contours
 

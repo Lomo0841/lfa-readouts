@@ -6,16 +6,23 @@ import time as t
 
 class HierarchicalSelector(IContourSelector):
 
-    def __init__(self, printer):
+    def __init__(self, printer, contours):
         self.printer = printer
+        self.contours = contours
         
-    def selectContour(self, contours) -> np.ndarray:
-        if len(contours) == 0:
+    def selectContour(self) -> np.ndarray:
+        selectedContour = None
+
+        if len(self.contours) == 0:
             sys.exit(1)
-        if len(contours) == 1:
-            return contours[0]
+        if len(self.contours) == 1:
+            selectedContour = self.contours[0]
         else:
-            return self.selectOutermost(contours)
+            selectedContour = self.selectOutermost(self.contours)
+
+        self.printer.write_image(self.image, "SelectedContour", selectedContour)
+
+        return selectedContour
 
     def selectOutermost(self, contours):
         """ largest_contour = None
