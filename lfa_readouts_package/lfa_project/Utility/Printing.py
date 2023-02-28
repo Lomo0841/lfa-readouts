@@ -14,7 +14,7 @@ class Printing():
         
         folder_name = now.strftime('%Y-%m-%d_%H-%M-%S')
         
-        folder_path = os.path.join(os.getcwd(), "lfa_project", "Results", folder_name)
+        folder_path = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
         
         os.makedirs(folder_path, exist_ok=True)
         

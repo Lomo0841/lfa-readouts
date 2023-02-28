@@ -9,7 +9,7 @@ from lfa_project.Utility.Printing import Printing
 
 start = t.time()
 #Setting up input
-input = cv.imread("lfa_project/Images/green.png")
+input = cv.imread("lfa_readouts_package\lfa_project\Images\green.png")
 
 height, width = input.shape[:2]
 
