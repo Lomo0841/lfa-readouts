@@ -1,5 +1,6 @@
 import cv2 as cv
 import time as t
+import platform 
 from lfa_project.Implementations.AprilTagsExtractor import AprilTagsExtractor
 from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresholdContourDetector
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
@@ -9,7 +10,11 @@ from lfa_project.Utility.Printing import Printing
 
 start = t.time()
 #Setting up input
-input = cv.imread("lfa_readouts_package\lfa_project\Images\green.png")
+
+if platform.system() == 'Windows':
+    input = input = cv.imread("lfa_readouts_package\lfa_project\Images\circle.png")
+else:
+    input = cv.imread("lfa_project/Images/circle.png")
 
 height, width = input.shape[:2]
 
