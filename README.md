@@ -1,2 +1,2 @@
 # lfa-readouts
-TODO
+pip install -e .
