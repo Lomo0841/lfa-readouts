@@ -15,10 +15,8 @@ class ColorAveragor():
 
         masked_img = cv.bitwise_and(self.image, self.image, mask=mask)
 
-        cv.imshow("masked", masked_img)
-
         avg_color = cv.mean(masked_img, mask=mask)
 
-        self.printer.write_file(avg_color)
+        self.printer.write_file(str(avg_color))
 
         return avg_color

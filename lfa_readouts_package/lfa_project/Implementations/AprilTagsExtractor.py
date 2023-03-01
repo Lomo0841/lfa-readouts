@@ -10,8 +10,6 @@ class AprilTagsExtractor(IRoiExtractor):
         self.printer = printer
         self.image = image
 
-    #Remember to dewarp in 3d space
-    #Can we use only one detection?
     def extractRois(self) -> cv.Mat:
 
         imageGreyScale = self.greyScale(self.image) 
@@ -47,8 +45,6 @@ class AprilTagsExtractor(IRoiExtractor):
             if det.tag_id == 4: 
                 lowerRight = det.corners[0].astype(int)
 
-        cv.imshow("corners???", originalImage)
-
         #https://theailearner.com/tag/cv2-warpperspective/
         widthUpper = np.sqrt(((upperLeft[0] - upperRight[0]) ** 2) + ((upperLeft[1] - upperRight[1]) ** 2))
         widthLower = np.sqrt(((lowerLeft[0] - lowerRight[0]) ** 2) + ((lowerLeft[1] - lowerRight[1]) ** 2))
@@ -65,7 +61,6 @@ class AprilTagsExtractor(IRoiExtractor):
         transform = cv.getPerspectiveTransform(originalPoints, transformedPoints)
 
         deWarpedImage = cv.warpPerspective(originalImage, transform,(maxWidth, maxHeight),flags=cv.INTER_LINEAR)
-        cv.imshow("Dewarped?", deWarpedImage)
 
         return deWarpedImage
 

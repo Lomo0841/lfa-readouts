@@ -9,12 +9,11 @@ from lfa_project.Implementations.ColorAveragor import ColorAveragor
 from lfa_project.Utility.Printing import Printing
 from lfa_project.Implementations.Context import Context
 
-imageName = "orange.png"
+cam = cv.VideoCapture(0)
 
-if platform.system() == 'Windows':
-    inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + imageName)
-else:
-    inputImage = cv.imread("lfa_project/Images/" + imageName)
+ret, inputImage = cam.read()
+
+cam.release()
 
 height, width = inputImage.shape[:2]
 
@@ -23,13 +22,12 @@ context = Context()
 
 printer = Printing()
 
+start = t.time()
 #THIS SHOULD BE OUTSOURCED TO THE TAKE PICTURE CLASS
 printer.write_image(inputImage, "OriginalImage")
 
-start = t.time()
 context.roiExtractorStrategy = AprilTagsExtractor(printer, inputImage)
 roi = context.executeRoiExtractorStrategy()
-print(t.time()-start)
 
 context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
 contours = context.executeContourDetectorStrategy()
@@ -49,6 +47,7 @@ averagor = ColorAveragor(printer, roi.copy(), selectedContour)
 
 averagor.averageColor()
 
+print(t.time()-start)
 #cv.waitKey(0)
 
 #cv.destroyAllWindows()

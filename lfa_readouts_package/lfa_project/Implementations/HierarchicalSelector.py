@@ -6,8 +6,9 @@ import time as t
 
 class HierarchicalSelector(IContourSelector):
 
-    def __init__(self, printer, contours):
+    def __init__(self, printer, image, contours):
         self.printer = printer
+        self.image = image
         self.contours = contours
         
     def selectContour(self) -> np.ndarray:

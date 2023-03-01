@@ -7,7 +7,7 @@ import platform
 class Printing():
 
     def __init__(self):
-        self.folder_path = None
+        self.folderPath = None
         self.create_folder()
 
     def create_folder(self):
@@ -16,41 +16,33 @@ class Printing():
         folder_name = now.strftime('%Y-%m-%d_%H-%M-%S')
         
         if platform.system() == 'Windows':
-            folder_path = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
+            folderPath = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
         else:
-            folder_path = os.path.join(os.getcwd(), "lfa_project", "Results", folder_name)
+            folderPath = os.path.join(os.getcwd(), "lfa_project", "Results", folder_name)
         
-        os.makedirs(folder_path, exist_ok=True)
+        os.makedirs(folderPath, exist_ok=True)
         
-        self.folder_path = folder_path
+        self.folderPath = folderPath
 
-    def write_image(self, image, name, contours = None):
-        if self.folder_path is None:
-            raise ValueError("Folder not created. Call create_folder() method first.")
+    def write_image(self, image, name, contours = []):
         
-        if contours != None:
+        if len(contours):
             cv.drawContours(image, contours, -1, (0, 255, 0), 3)
 
-        #now = datetime.datetime.now()
+        pictureName = name + ".png"
 
-        #picture_name = now.strftime("%Y%m%d%H%M%S%f") + ".png"
-
-        picture_name = name + ".png"
-
-        img_path = os.path.join(self.folder_path, picture_name)
+        img_path = os.path.join(self.folderPath, pictureName)
 
         cv.imwrite(img_path, image)
         
         
     def write_file(self, message):
-        if self.folder_path is None:
-            raise ValueError("Folder not created. Call create_folder() method first.")
         
         now = datetime.datetime.now()
 
         txt_name = now.strftime("%Y%m%d%H%M%S%f") + ".txt"
 
-        txt_path = os.path.join(self.folder_path, txt_name)
+        txt_path = os.path.join(self.folderPath, txt_name)
 
         with open(txt_path, "w") as f:
             f.write(message)

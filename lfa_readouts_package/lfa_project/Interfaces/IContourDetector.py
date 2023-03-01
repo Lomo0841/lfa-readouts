@@ -6,4 +6,3 @@ class IContourDetector(ABC):
     @abstractmethod
     def detectContours(self):
         pass
-
