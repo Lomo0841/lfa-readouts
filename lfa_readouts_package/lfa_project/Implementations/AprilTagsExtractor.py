@@ -24,14 +24,14 @@ class AprilTagsExtractor(IRoiExtractor):
 
         return deWarped
     
-    def greyScale(self, image) -> cv.Mat:
+    def greyScale(self, image):
         
         greyScale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
         return greyScale
     
     #Extracted to more methods? 
-    def deWarp(self, originalImage, greyscale) -> cv.Mat:
+    def deWarp(self, originalImage, greyscale):
 
         detections = self.detectAprilTags(greyscale)
 

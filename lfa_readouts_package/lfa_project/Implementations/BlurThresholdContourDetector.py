@@ -11,7 +11,7 @@ class BlurThresholdContourDetector(IContourDetector):
 
     
     #Should return a list of pictures
-    def detectContours(self) -> cv.Mat:
+    def detectContours(self):
         blurredImage = self.blur(self.image)
 
         thresholdedImage = self.threshold(blurredImage)
@@ -25,19 +25,19 @@ class BlurThresholdContourDetector(IContourDetector):
         return contours
 
 
-    def blur(self, image) -> cv.Mat:
+    def blur(self, image):
         blur = cv.GaussianBlur(image, (5, 5), 0)
 
         return blur
 
-    def threshold(self, image) -> cv.Mat:
+    def threshold(self, image):
         greyScale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
         ret, thresholdedImage = cv.threshold(greyScale, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
         return thresholdedImage
     
-    def findContours(self, thresholdedImage) -> cv.Mat:
+    def findContours(self, thresholdedImage):
         contours, hierarchy = cv.findContours(thresholdedImage, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
         return contours

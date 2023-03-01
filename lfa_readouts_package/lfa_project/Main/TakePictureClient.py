@@ -32,10 +32,8 @@ roi = context.executeRoiExtractorStrategy()
 context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
 contours = context.executeContourDetectorStrategy()
 
-
 #context.contourFiltratorStrategy = FilterOnConditions(printer, contours)
 #filtratedContours = context.executeContourFiltratorStrategy()
-
 
 filtrator = FilterOnConditions(printer, roi.copy(), contours)
 filtratedContours = filtrator.touchEdgeFilter(contours, height, width)
@@ -44,7 +42,6 @@ context.contourSelectorStrategy = HierarchicalSelector(printer, roi.copy(), filt
 selectedContour = context.executeContourSelectorStrategy()
 
 averagor = ColorAveragor(printer, roi.copy(), selectedContour)
-
 averagor.averageColor()
 
 print(t.time()-start)

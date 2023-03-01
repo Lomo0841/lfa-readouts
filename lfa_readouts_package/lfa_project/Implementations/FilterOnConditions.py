@@ -8,27 +8,37 @@ from lfa_project.Interfaces.IContourFiltrator import IContourFiltrator
 #maybe every parameter in the constructor should be given as fields gotten from a config file
 class FilterOnConditions(IContourFiltrator):
 
-    def __init__(self, printer, image, contours):
+    def __init__(self, printer, config, image, contours):
         self.printer = printer
         self.image = image
         self.contours = contours
+        self.config = config
     
-    def filterContours(self, minArea, height, width, maxdepth, points) -> np.ndarray:
+    def filterContours(self):
+        section = "FiltrationVariables"
+        minArea = self.config.getConfigInt(section, "minAreaOfContour")
+        maxDepth = self.config.getConfigInt(section, "maxDepthOfConvex")
+        expectedCentrumX = self.config.getConfigInt(section, "expectedCentrumX")
+        expectedCentrumY = self.config.getConfigInt(section, "expectedCentrumY")
+        maxDistanceFromCentrum = self.config.getConfigInt(section, "maxDistanceFromCentrum")
 
         areafilterered = self.areaFilter(self.contours, minArea)
 
-        touchEdgeFiltered = self.touchEdgeFilter(areafilterered, height, width)
+        touchEdgeFiltered = self.touchEdgeFilter(areafilterered)
 
-        convexityDetectFiltered = self.convexityDetectFilter(touchEdgeFiltered, maxdepth)
+        convexityDefectFiltered = self.convexityDefectFilter(touchEdgeFiltered, maxDepth)
 
-        pointFiltered = self.pointFilter(convexityDetectFiltered, points)
+        centroidDistanceFiltered = self.centroidDistanceFilter(convexityDefectFiltered, expectedCentrumX, expectedCentrumY, maxDistanceFromCentrum)
 
-        self.printer.write_image(self.image, "FilteredContours", pointFiltered)
+        #Do we need this?
+        #pointFiltered = self.pointFilter(convexityDefectFiltered, points)
 
-        return pointFiltered
+        self.printer.write_image(self.image, "FilteredContours", centroidDistanceFiltered)
+
+        return centroidDistanceFiltered
 
     #Where does it recieve the points from? 
-    def pointFilter(self, contours, points) -> np.ndarray:
+    def pointFilter(self, contours, points):
         filteredContours = []
         for cnt in contours:
             if all(cv.pointPolygonTest(cnt, p, measureDist=False) >= 0 for p in points):
@@ -37,7 +47,7 @@ class FilterOnConditions(IContourFiltrator):
 
     
 
-    def areaFilter(self, contours, minArea) -> np.ndarray:
+    def areaFilter(self, contours, minArea):
         #Iterate over the contours and filter them based on area
         filteredContours = []
         
@@ -49,8 +59,10 @@ class FilterOnConditions(IContourFiltrator):
         return filteredContours
 
     #Maybe use numpy and argmax (and big if statement?)
-    def touchEdgeFilter(self, contours, height, width) -> np.ndarray:
+    def touchEdgeFilter(self, contours):
         filteredContours = []
+
+        height, width = self.image.shape[:2]
 
         """ for cnt in contours:
             x = cnt[:, 0][:, 0]
@@ -89,7 +101,7 @@ class FilterOnConditions(IContourFiltrator):
 
         return filteredContours
 
-    def convexityDetectFilter(self, contours, maxDepth) -> np.ndarray:
+    def convexityDefectFilter(self, contours, maxDepth):
         #Iterate over the contours and filter them based on area
         filteredContours = []
 
@@ -109,7 +121,7 @@ class FilterOnConditions(IContourFiltrator):
 
         return filteredContours
     
-    def centroidDistanceFilter(self, contours, expectedCentrumX, expectedCentrumY, maxDistanceToCentrum) -> np.ndarray:
+    def centroidDistanceFilter(self, contours, expectedCentrumX, expectedCentrumY, maxDistanceFromCentrum):
         filteredContours = []
         cx = 0 
         cy = 0
@@ -124,7 +136,7 @@ class FilterOnConditions(IContourFiltrator):
 
             distance = math.sqrt((cx - expectedCentrumX)**2 + (cy - expectedCentrumY)**2)
             
-            if distance <= maxDistanceToCentrum:
+            if distance <= maxDistanceFromCentrum:
                 filteredContours.append(cnt)
        
         return filteredContours

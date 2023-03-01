@@ -55,8 +55,8 @@ class Context():
     def executeContourDetectorStrategy(self):
         return self._contourDetectorStrategy.detectContours()
     
-    def executeContourFiltratorStrategy(self, minArea, height, width, maxdepth, points):
-        return self._contourFiltratorStrategy.filterContours(minArea, height, width, maxdepth, points)
+    def executeContourFiltratorStrategy(self):
+        return self._contourFiltratorStrategy.filterContours()
 
     def executeContourSelectorStrategy(self):
         return self._contourSelectorStrategy.selectContour()

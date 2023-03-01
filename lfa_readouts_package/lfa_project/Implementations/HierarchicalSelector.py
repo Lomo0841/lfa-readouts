@@ -15,6 +15,7 @@ class HierarchicalSelector(IContourSelector):
         selectedContour = None
 
         if len(self.contours) == 0:
+            print("No contours to select from")
             sys.exit(1)
         if len(self.contours) == 1:
             selectedContour = self.contours[0]
