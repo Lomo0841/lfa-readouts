@@ -48,7 +48,6 @@ class FilterOnConditions(IContourFiltrator):
     
 
     def areaFilter(self, contours, minArea):
-        #Iterate over the contours and filter them based on area
         filteredContours = []
         
         for cnt in contours:

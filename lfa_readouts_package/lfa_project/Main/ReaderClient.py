@@ -6,11 +6,12 @@ from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresho
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
 from lfa_project.Implementations.HierarchicalSelector import HierarchicalSelector
 from lfa_project.Implementations.ColorAveragor import ColorAveragor
+from lfa_project.Implementations.Context import Context
+from lfa_project.Implementations.DeepSearch import DeepSearch
 from lfa_project.Utility.Printing import Printing
 from lfa_project.Utility.ConfigReader import ConfigReader
-from lfa_project.Implementations.Context import Context
 
-imageName = "green.png"
+imageName = "normalblurry.png"
 
 if platform.system() == 'Windows':
     inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + imageName)
@@ -36,14 +37,15 @@ print(t.time()-start)
 context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
 contours = context.executeContourDetectorStrategy()
 
-
-context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
-
 context.contourFiltratorStrategy = FilterOnConditions(printer, config, roi.copy(), contours)
 filtratedContours = context.executeContourFiltratorStrategy()
 
-#filtrator = FilterOnConditions(printer, roi.copy(), contours)
-#filtratedContours = filtrator.touchEdgeFilter(contours, height, width)
+if len(filtratedContours) == 0:
+    context.contourDetectorStrategy = DeepSearch(printer, roi.copy())
+    contours = context.executeContourDetectorStrategy()
+    
+    context.contourFiltratorStrategy = FilterOnConditions(printer, config, roi.copy(), contours)
+    filtratedContours = context.executeContourFiltratorStrategy()
 
 context.contourSelectorStrategy = HierarchicalSelector(printer, roi.copy(), filtratedContours)
 selectedContour = context.executeContourSelectorStrategy()

@@ -11,11 +11,11 @@ class HierarchicalSelector(IContourSelector):
         self.image = image
         self.contours = contours
         
-    def selectContour(self) -> np.ndarray:
+    def selectContour(self):
         selectedContour = None
 
         if len(self.contours) == 0:
-            print("No contours to select from")
+            #print("No contours to select from after deepsearch. Terminating program.")
             sys.exit(1)
         if len(self.contours) == 1:
             selectedContour = self.contours[0]

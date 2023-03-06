@@ -10,7 +10,7 @@ class AprilTagsExtractor(IRoiExtractor):
         self.printer = printer
         self.image = image
 
-    def extractRois(self) -> cv.Mat:
+    def extractRois(self):
 
         imageGreyScale = self.greyScale(self.image) 
         
