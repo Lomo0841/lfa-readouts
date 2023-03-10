@@ -11,7 +11,7 @@ from lfa_project.Implementations.DeepSearch import DeepSearch
 from lfa_project.Utility.Printing import Printing
 from lfa_project.Utility.ConfigReader import ConfigReader
 
-imageName = "normalblurry.png"
+imageName = "green.png"
 
 if platform.system() == 'Windows':
     inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + imageName)

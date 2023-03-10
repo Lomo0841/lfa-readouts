@@ -30,7 +30,6 @@ class AprilTagsExtractor(IRoiExtractor):
 
         return greyScale
     
-    #Extracted to more methods? 
     def deWarp(self, originalImage, greyscale):
 
         detections = self.detectAprilTags(greyscale)
