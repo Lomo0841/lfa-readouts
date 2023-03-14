@@ -2,7 +2,6 @@ import cv2 as cv
 import numpy as np
 import math
 import itertools
-import matplotlib.pyplot as plt
 from lfa_project.Interfaces.IContourDetector import IContourDetector
 
 class DeepSearch(IContourDetector):
