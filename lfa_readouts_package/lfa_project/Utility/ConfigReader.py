@@ -7,10 +7,10 @@ class ConfigReader():
         self.config = configparser.ConfigParser()
 
         if platform.system() == 'Windows':
-            configPath = "lfa_readouts_package\lfa_project\config.ini"
+            self.configPath = "lfa_readouts_package\lfa_project\config.ini"
         else:
-            configPath = "lfa_project/config.ini"
-        self.config.read(configPath)
+            self.configPath = "lfa_project/config.ini"
+        self.config.read(self.configPath)
 
     def getConfigString(self, section, option):
         return self.config.get(section, option)
@@ -20,4 +20,9 @@ class ConfigReader():
     
     def getConfigBoolean(self, section, option):
         return self.config.getboolean(section, option)
+
+    def writeToConfig(self, section, option, value):
+        self.config.set(section, option, value)
+        with open(self.configPath, 'w') as configfile:
+            self.config.write(configfile)
 
