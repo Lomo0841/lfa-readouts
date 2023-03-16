@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+    <title>LFA Analysis</title>
+   
+{% endblock %}
+
+{% block body %}
+  
+  <div class="container">
+    <div class="form-container">
+      <div class="image-container">
+        
+        {% if isVideo %}
+        <img src="{{ url_for('live_image') }}" alt="LFA image" />
+        {% else %}
+        <img src="data:image/png;base64,{{ inputImage }}" id="lfa_image" alt="LFA image"/>
+        {% endif %}
+      </div>
+
+      <!-- https://stackoverflow.com/questions/379610/can-you-nest-html-forms -->
+      
+      <form id="Form1" class="form" method="POST"></form>
+      <form id="Form2" method="GET" action="{{ url_for('cap_image') }}"></form></form> 
+      <form id="Form3" method="GET" action="{{ url_for('run_algorithm') }}"></form></form> 
+      <div class="form-group">
+        <label for="center">Center (x,y)</label>
+        <div class="input-group-x-y">
+          <input type="number" name="center_x" id="center_x" value="{{x}}" form="Form1"/>
+          <input type="number" name="center_y" id="center_y" value="{{y}}" form="Form1"/>
+        </div>
+        
+        <label for="max_dist">Maximum Center Distance</label>
+        <input type="number" name="max_dist" value="{{maxDist}}" form="Form1"/>
+        <label for="min_area">Minimum Area</label>
+        <input type="number" name="min_area" value="{{minArea}}" form="Form1"/>
+        <label for="max_defect">Maximum Convexity Defect</label>
+        <input type="number" name="max_defect" value="{{maxDefect}}" form="Form1"/>
+        <div class="input-group-x-y">
+          <button type="submit" id="capture_btn" form="Form2">Capture Image</button>
+          <button type="submit" form="Form1">Update Config File</button>
+          <button type="submit" form="Form3">Run Algorithm</button>
+        </div>
+      </div>
+    
+      
+    </div>
+  </div>
+
+  <script>
+    //https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+
+    addDrawOnEnter(document.getElementById("center_x"))
+    addDrawOnEnter(document.getElementById("center_y"))
+
+    /* var captureBtn = document.getElementById('capture_btn');
+    captureBtn.
+    captureBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+
+
+    }); */
+    
+    
+    var image = document.getElementById('lfa_image');
+    image.addEventListener('click', function(event) {
+        var x = event.offsetX;
+        var y = event.offsetY;
+        console.log("x: " + x + ", y: " + y)
+
+        document.getElementById('center_x').value = x;
+        document.getElementById('center_y').value = y;
+        drawDotOnImage("data:image/png;base64,{{ inputImage }}", x, y);
+    });
+  
+
+    function drawDotOnImage(imageUrl, x, y) {
+// Create a new image element and load the image from the URL
+        var image = new Image();
+        image.src = imageUrl; 
+
+// Wait for the image to load
+        image.onload = function() {
+            // Get a reference to the canvas element and its context
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            var existingImage = document.getElementById('lfa_image');
+
+            // Set the canvas size to match the image size
+            existingWidth = existingImage.width;
+            existingHeight = existingImage.height;
+
+            canvas.width = existingWidth
+            canvas.height = existingHeight
+
+            // Draw the image on the canvas
+            context.drawImage(image, 0, 0, existingWidth, existingHeight);
+
+            // Draw a red dot on the canvas at the specified coordinates
+            context.beginPath();
+            context.arc(x, y, 5, 0, 2 * Math.PI, false);
+            context.fillStyle = 'red';
+            context.fill();
+
+            // Replace the image with the modified canvas
+            existingImage.src = canvas.toDataURL();
+
+        };
+    }
+
+    function addDrawOnEnter(input) {
+        // Execute a function when the user presses a key on the keyboard
+        input.addEventListener("keypress", function(event) {
+            // If the user presses the "Enter" key on the keyboard
+            if (event.key === "Enter") {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                drawDotOnImage("data:image/png;base64,{{ inputImage }}", document.getElementById('center_x').value, document.getElementById('center_y').value)
+            }
+        });
+    }
+//data:image/png;base64,{{ inputImage }}
+
+</script>
+
+{% endblock %}
+
