@@ -20,26 +20,27 @@
 
       <!-- https://stackoverflow.com/questions/379610/can-you-nest-html-forms -->
       
-      <form id="Form1" class="form" method="POST"></form>
-      <form id="Form2" method="GET" action="{{ url_for('cap_image') }}"></form></form> 
-      <form id="Form3" method="GET" action="{{ url_for('run_algorithm') }}"></form></form> 
+      <form id="post_form"  method="POST" action="{{ url_for('post_data') }}"></form>
+      <form id="cap_form" method="GET" action="{{ url_for('cap_image') }}"></form></form> 
+      <form id="algo_form" method="GET" action="{{ url_for('run_algorithm') }}"></form></form> 
+      
       <div class="form-group">
         <label for="center">Center (x,y)</label>
         <div class="input-group-x-y">
-          <input type="number" name="center_x" id="center_x" value="{{x}}" form="Form1"/>
-          <input type="number" name="center_y" id="center_y" value="{{y}}" form="Form1"/>
+          <input type="number" name="center_x" id="center_x" value="{{x}}" form="post_form"/>
+          <input type="number" name="center_y" id="center_y" value="{{y}}" form="post_form"/>
         </div>
         
         <label for="max_dist">Maximum Center Distance</label>
-        <input type="number" name="max_dist" value="{{maxDist}}" form="Form1"/>
+        <input type="number" name="max_dist" id="max_dist" value="{{maxDist}}" form="post_form"/>
         <label for="min_area">Minimum Area</label>
-        <input type="number" name="min_area" value="{{minArea}}" form="Form1"/>
+        <input type="number" name="min_area" id="min_area" value="{{minArea}}" form="post_form"/>
         <label for="max_defect">Maximum Convexity Defect</label>
-        <input type="number" name="max_defect" value="{{maxDefect}}" form="Form1"/>
+        <input type="number" name="max_defect" value="{{maxDefect}}" form="post_form"/>
         <div class="input-group-x-y">
-          <button type="submit" id="capture_btn" form="Form2">Capture Image</button>
-          <button type="submit" form="Form1">Update Config File</button>
-          <button type="submit" form="Form3">Run Algorithm</button>
+          <button type="submit" id="capture_btn" form="cap_form">Capture Image</button>
+          <button type="submit" form="post_form">Update Config File</button>
+          <button type="submit" form="algo_form">Run Algorithm</button>
         </div>
       </div>
     
@@ -52,6 +53,9 @@
 
     addDrawOnEnter(document.getElementById("center_x"))
     addDrawOnEnter(document.getElementById("center_y"))
+    addDrawOnEnter(document.getElementById("min_area"))
+    addDrawOnEnter(document.getElementById("max_dist"))
+
 
     /* var captureBtn = document.getElementById('capture_btn');
     captureBtn.
@@ -66,15 +70,14 @@
     image.addEventListener('click', function(event) {
         var x = event.offsetX;
         var y = event.offsetY;
-        console.log("x: " + x + ", y: " + y)
 
         document.getElementById('center_x').value = x;
         document.getElementById('center_y').value = y;
-        drawDotOnImage("data:image/png;base64,{{ inputImage }}", x, y);
+        drawOnImage("data:image/png;base64,{{ inputImage }}", x, y);
     });
   
 
-    function drawDotOnImage(imageUrl, x, y) {
+    function drawOnImage(imageUrl, centerX, centerY) {
 // Create a new image element and load the image from the URL
         var image = new Image();
         image.src = imageUrl; 
@@ -96,12 +99,18 @@
             // Draw the image on the canvas
             context.drawImage(image, 0, 0, existingWidth, existingHeight);
 
-            // Draw a red dot on the canvas at the specified coordinates
-            context.beginPath();
-            context.arc(x, y, 5, 0, 2 * Math.PI, false);
-            context.fillStyle = 'red';
-            context.fill();
+            // CIRCLEDRAW?
+            area = document.getElementById('min_area').value;
+            radius = Math.sqrt(area / Math.PI)
+            //Is linewidth wierd? changes size of circle?
+            drawCircle(context, centerX, centerY, radius)
+            
+            //LINEDRAW?
+            maxDist = document.getElementById('max_dist').value;
+            drawLineFromPoint(context, centerX, centerY, parseInt(maxDist))
+            
 
+                
             // Replace the image with the modified canvas
             existingImage.src = canvas.toDataURL();
 
@@ -116,9 +125,25 @@
                 // Cancel the default action, if needed
                 event.preventDefault();
                 // Trigger the button element with a click
-                drawDotOnImage("data:image/png;base64,{{ inputImage }}", document.getElementById('center_x').value, document.getElementById('center_y').value)
+                drawOnImage("data:image/png;base64,{{ inputImage }}", parseInt(document.getElementById('center_x').value), parseInt(document.getElementById('center_y').value))
             }
         });
+    }
+
+    function drawCircle(context, x, y, radius) {
+      context.beginPath();
+            context.arc(x, y, radius, 0, 2 * Math.PI, false);
+            context.strokeStyle = `rgb(0,255,0)`;
+            context.lineWidth = 3;    
+            context.stroke();
+    }
+
+    function drawLineFromPoint(context, startX, startY, length) {
+      endX = startX + length;
+      context.beginPath();
+      context.moveTo(startX, startY);
+      context.lineTo(endX, startY);
+      context.stroke();
     }
 //data:image/png;base64,{{ inputImage }}
 
