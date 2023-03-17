@@ -15,8 +15,10 @@ class HierarchicalSelector(IContourSelector):
         selectedContour = None
 
         if len(self.contours) == 0:
-            #print("No contours to select from after deepsearch. Terminating program.")
-            sys.exit(1)
+            print("No contours to select from after deepsearch. Terminating program.")
+            
+            raise Exception("No contours to select from after deepsearch. Terminating program.")
+
         if len(self.contours) == 1:
             selectedContour = self.contours[0]
         else:
