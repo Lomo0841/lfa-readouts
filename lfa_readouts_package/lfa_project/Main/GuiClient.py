@@ -21,38 +21,45 @@ class GuiClient():
         
     def __init__(self, inputImage):
 
+    
         #Setting up instances
-        context = Context()
+        self.context = Context()
 
-        printer = Printing()
+        self.printer = Printing()
 
-        config = ConfigReader()
+        self.config = ConfigReader()
+
+        self.inputImage = inputImage
 
         #THIS SHOULD BE OUTSOURCED TO THE TAKE PICTURE CLASS
-        printer.write_image(inputImage, "OriginalImage")
+        self.printer.write_image(self.inputImage, "OriginalImage")
 
-        start = t.time()
-        context.roiExtractorStrategy = AprilTagsExtractor(printer, inputImage)
-        roi = context.executeRoiExtractorStrategy()
-        print(t.time()-start)
+    def findRoi(self):
+        self.context.roiExtractorStrategy = AprilTagsExtractor(self.printer, self.inputImage)
+        roi = self.context.executeRoiExtractorStrategy()
 
-        context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
-        contours = context.executeContourDetectorStrategy()
+        return roi
 
-        context.contourFiltratorStrategy = FilterOnConditions(printer, config, roi.copy(), contours)
-        filtratedContours = context.executeContourFiltratorStrategy()
+    def runTheAlgorithmToFindTheContoursAndThenTheColorAndThenTheResult(self, roi):
+
+        self.context.contourDetectorStrategy = BlurThresholdContourDetector(self.printer, roi.copy())
+        contours = self.context.executeContourDetectorStrategy()
+
+        self.context.contourFiltratorStrategy = FilterOnConditions(self.printer, self.config, roi.copy(), contours)
+        filtratedContours = self.context.executeContourFiltratorStrategy()
 
         if len(filtratedContours) == 0:
-            context.contourDetectorStrategy = DeepSearch(printer, roi.copy())
-            contours = context.executeContourDetectorStrategy()
+            print("Entering Deep Search...")
+            self.context.contourDetectorStrategy = DeepSearch(self.printer, roi.copy())
+            contours = self.context.executeContourDetectorStrategy()
             
-            context.contourFiltratorStrategy = FilterOnConditions(printer, config, roi.copy(), contours)
-            filtratedContours = context.executeContourFiltratorStrategy()
+            self.context.contourFiltratorStrategy = FilterOnConditions(self.printer, self.config, roi.copy(), contours)
+            filtratedContours = self.context.executeContourFiltratorStrategy()
 
-        context.contourSelectorStrategy = HierarchicalSelector(printer, roi.copy(), filtratedContours)
-        selectedContour = context.executeContourSelectorStrategy()
+        self.context.contourSelectorStrategy = HierarchicalSelector(self.printer, roi.copy(), filtratedContours)
+        selectedContour = self.context.executeContourSelectorStrategy()
 
-        averagor = ColorAveragor(printer, roi.copy(), selectedContour)
+        averagor = ColorAveragor(self.printer, roi.copy(), selectedContour)
 
         averagor.averageColor()
 
