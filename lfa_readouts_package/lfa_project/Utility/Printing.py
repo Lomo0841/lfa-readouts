@@ -15,10 +15,7 @@ class Printing():
         
         folder_name = now.strftime('%Y-%m-%d_%H-%M-%S')
         
-        if platform.system() == 'Windows':
-            folderPath = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
-        else:
-            folderPath = os.path.join(os.getcwd(), "lfa_project", "Results", folder_name)
+        folderPath = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
         
         os.makedirs(folderPath, exist_ok=True)
         

@@ -9,7 +9,7 @@ class ConfigReader():
         if platform.system() == 'Windows':
             self.configPath = "lfa_readouts_package\lfa_project\config.ini"
         else:
-            self.configPath = "lfa_project/config.ini"
+            self.configPath = "lfa_readouts_package/lfa_project/config.ini"
         self.config.read(self.configPath)
 
     def getConfigString(self, section, option):
