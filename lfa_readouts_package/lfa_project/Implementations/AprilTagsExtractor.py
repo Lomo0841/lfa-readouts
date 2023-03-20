@@ -33,6 +33,9 @@ class AprilTagsExtractor(IRoiExtractor):
     def deWarp(self, originalImage, greyscale):
 
         detections = self.detectAprilTags(greyscale)
+        
+        if len(detections) < 4:
+            raise Exception("Could not find all 4 AprilTags")
 
         for det in detections:
             if det.tag_id == 0:

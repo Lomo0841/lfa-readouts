@@ -40,9 +40,14 @@ def live_image():
 def cap_image():
     global isVideo, frame, client
     isVideo = False
-    client = GuiClient(frame)
-    frame = client.findRoi()
-    return redirect('/')
+    try:
+        client = GuiClient(frame)
+        frame = client.findRoi()
+        return redirect('/')
+    except Exception as e:
+        print(e)
+        return redirect(url_for('error', errorMessage=e))
+    
 
 
 @app.route('/run_algorithm') 

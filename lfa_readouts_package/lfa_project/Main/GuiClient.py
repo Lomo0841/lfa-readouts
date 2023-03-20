@@ -27,7 +27,6 @@ class GuiClient():
 
         self.printer = Printing()
 
-        self.config = ConfigReader()
 
         self.inputImage = inputImage
 
@@ -41,6 +40,7 @@ class GuiClient():
         return roi
 
     def runTheAlgorithmToFindTheContoursAndThenTheColorAndThenTheResult(self, roi):
+        self.config = ConfigReader()
 
         self.context.contourDetectorStrategy = BlurThresholdContourDetector(self.printer, roi.copy())
         contours = self.context.executeContourDetectorStrategy()
