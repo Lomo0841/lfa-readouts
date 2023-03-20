@@ -13,10 +13,10 @@ class ColorAveragor():
 
         cv.drawContours(mask, [self.contour], 0, 255, -1)
 
-        masked_img = cv.bitwise_and(self.image, self.image, mask=mask)
+        maskedImage = cv.bitwise_and(self.image, self.image, mask=mask)
 
-        avg_color = cv.mean(masked_img, mask=mask)
+        avgColor = cv.mean(maskedImage, mask=mask)
 
-        self.printer.write_file(str(avg_color))
+        self.printer.write_file(str(avgColor))
 
-        return avg_color
+        return avgColor

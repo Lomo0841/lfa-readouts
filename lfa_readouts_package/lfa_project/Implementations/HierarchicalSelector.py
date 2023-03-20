@@ -29,16 +29,6 @@ class HierarchicalSelector(IContourSelector):
         return selectedContour
 
     def selectOutermost(self, contours):
-        """ largest_contour = None
-        largest_area = 0
-        for contour in contours:
-            area = cv.contourArea(contour)
-            if area > largest_area:
-                largest_area = area
-                largest_contour = contour
-      
-        return largest_contour """
-    
         contourAreas = map(lambda cnt : cv.contourArea(cnt), contours)
 
         largestContour = np.argmax(list(contourAreas))

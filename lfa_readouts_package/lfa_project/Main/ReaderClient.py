@@ -11,7 +11,7 @@ from lfa_project.Implementations.DeepSearch import DeepSearch
 from lfa_project.Utility.Printing import Printing
 from lfa_project.Utility.ConfigReader import ConfigReader
 
-imageName = "green.png"
+imageName = "squaregreen.png"
 
 if platform.system() == 'Windows':
     inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + imageName)
@@ -32,7 +32,9 @@ printer.write_image(inputImage, "OriginalImage")
 start = t.time()
 context.roiExtractorStrategy = AprilTagsExtractor(printer, inputImage)
 roi = context.executeRoiExtractorStrategy()
-print(t.time()-start)
+
+stop = t.time()
+print(stop-start)
 
 context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
 contours = context.executeContourDetectorStrategy()

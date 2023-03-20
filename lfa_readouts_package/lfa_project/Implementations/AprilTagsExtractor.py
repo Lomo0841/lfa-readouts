@@ -6,19 +6,25 @@ import time as t
 
 class AprilTagsExtractor(IRoiExtractor):
 
+    #maybe config
     def __init__(self, printer, image):
         self.printer = printer
         self.image = image
+        #self.config = config
+
 
     def extractRois(self):
+        #section = "CropRoi"
+        #x = self.config.getConfigInt(section, "x")
+        #y = self.config.getConfigInt(section, "y")
+        #h = self.config.getConfigInt(section, "h")
+        #w = self.config.getConfigInt(section, "w")
 
         imageGreyScale = self.greyScale(self.image) 
         
         deWarped = self.deWarp(self.image, imageGreyScale)
-
-        #greyScaleDewarped = self.greyScale(deWarped)
         
-        #cropped = self.cropRoi(deWarped, greyScaleDewarped)
+        #cropped = self.cropRoi(deWarped, x, y, h, w)
 
         self.printer.write_image(deWarped, "Roi")
 
@@ -67,50 +73,10 @@ class AprilTagsExtractor(IRoiExtractor):
         return deWarpedImage
 
 
-        
-        """ #Converting the corners to a matrix where each row corresponds to a corner
-        tag_corners = detections[0].corners.reshape((4, 2))
+    def cropRoi(image, x, y, h, w):
 
-        tag_id = detections[0].tag_id
+        return image[y:y+h, x:x+w]
 
-        if tag_id == 0:
-            #Get the coordinates of the two top corners
-            top_corners = tag_corners[:2]
-
-            #Calculate the angle between the two top corners and the horizontal axis
-            angle = np.arctan2(top_corners[1][1] - top_corners[0][1], top_corners[1][0] - top_corners[0][0]) * 180 / np.pi
-
-            #Creating rotationmatrix based on the center of the image and the calculated angle
-            height, width = originalImage.shape[:2]
-            center = (width // 2, height // 2)
-            M = cv.getRotationMatrix2D(center, angle, 1.0)
-
-            #Applying the rotationmatrix
-            rotatedImage = cv.warpAffine(originalImage, M, (width, height))
-
-            return rotatedImage """
-
-    """   def cropRoi(self, image, greyscale) -> cv.Mat: 
-        
-        detections = self.detectAprilTags(greyscale)
-
-        for det in detections:
-            if det.tag_id == 0:
-                upperleft = det.corners[2].astype(int)
-                #cv.circle(image, det.corners[0].astype(int), radius=10, color=(255,0,0), thickness=2)
-                #cv.circle(image, det.corners[1].astype(int), radius=10, color=(0,255,0), thickness=2)
-                #cv.circle(image, det.corners[2].astype(int), radius=10, color=(0,0,255), thickness=2)
-            if det.tag_id == 1:
-                pass
-            if det.tag_id == 2:
-                pass
-            if det.tag_id == 4: 
-                lowerright = det.corners[0].astype(int)
-
-        #cv.imshow("corners", image)
-        croppedImage = image[upperleft[1]:lowerright[1], upperleft[0]:lowerright[0]]
-
-        return croppedImage """
     
     def detectAprilTags(self, greyscale):
 
