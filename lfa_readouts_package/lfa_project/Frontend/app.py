@@ -65,7 +65,8 @@ def run_algorithm():
 
 @app.route('/error/<errorMessage>')
 def error(errorMessage):
-    
+    global isVideo
+    isVideo = True
     return  render_template('error-page.html', errorMessage=errorMessage)
 
 @app.route('/post_data', methods=['POST'])
