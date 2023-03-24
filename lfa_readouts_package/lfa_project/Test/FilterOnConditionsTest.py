@@ -4,7 +4,7 @@ import numpy as np
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
 from lfa_project.Utility.ConfigReader import ConfigReader
 
-class TestFilterOnConditions(unittest.TestCase):
+class FilterOnConditionsTest(unittest.TestCase):
 
     def setUp(self):
         #Arrange

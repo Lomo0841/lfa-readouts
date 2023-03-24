@@ -14,9 +14,7 @@ class HierarchicalSelector(IContourSelector):
     def selectContour(self):
         selectedContour = None
 
-        if len(self.contours) == 0:
-            print("No contours to select from after deepsearch. Terminating program.")
-            
+        if len(self.contours) == 0:            
             raise Exception("No contours to select from after deepsearch. Terminating program.")
 
         if len(self.contours) == 1:

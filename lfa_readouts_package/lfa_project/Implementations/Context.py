@@ -8,6 +8,7 @@ class Context():
         self._contourFiltratorStrategy= None
         self._contourSelectorStrategy  = None
         self._resultTranslatorStrategy  = None
+        self._whiteBalancingStrategy = None
 
     @property
     def roiExtractorStrategy(self):
@@ -29,6 +30,10 @@ class Context():
     def resultTranslatorStrategy(self):
         return self._resultTranslatorStrategy
     
+    @property
+    def whiteBalancingStrategy(self):
+        return self._whiteBalancingStrategy
+    
     @roiExtractorStrategy.setter
     def roiExtractorStrategy(self, value):
         self._roiExtractorStrategy = value
@@ -49,6 +54,10 @@ class Context():
     def resultTranslatorStrategy(self, value):
         self._resultTranslatorStrategy = value
 
+    @whiteBalancingStrategy.setter
+    def whiteBalancingStrategy(self, value):
+        self._whiteBalancingStrategy = value
+
     def executeRoiExtractorStrategy(self):
         return self._roiExtractorStrategy.extractRois()
     
@@ -63,3 +72,7 @@ class Context():
 
     def executeResultTranslatorStrategy(self):
         return self._resultTranslatorStrategy.translateResult()
+    
+    def executeWhiteBalancingStrategy(self):
+        return self._whiteBalancingStrategy.whiteBalance()
+    

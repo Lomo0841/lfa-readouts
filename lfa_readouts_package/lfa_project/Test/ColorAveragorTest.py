@@ -4,7 +4,7 @@ import cv2 as cv
 import numpy as np
 from lfa_project.Implementations.ColorAveragor import ColorAveragor
 
-class TestColorAveragor(unittest.TestCase):
+class ColorAveragorTest(unittest.TestCase):
 
     def setUp(self):
         #Arrange

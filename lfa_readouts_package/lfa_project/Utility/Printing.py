@@ -1,9 +1,7 @@
 import datetime
 import cv2 as cv
 import os
-import platform
 
-#EVERY CLASS IS GIVEN THE SAME PRINTING INSTANCE WHEN INSTANTIATED IN THE MAIN METHOD
 class Printing():
 
     def __init__(self):

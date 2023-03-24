@@ -1,6 +1,5 @@
 import cv2 as cv
 import numpy as np
-import math
 import itertools
 from lfa_project.Interfaces.IContourDetector import IContourDetector
 
