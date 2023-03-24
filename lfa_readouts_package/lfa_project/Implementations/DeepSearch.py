@@ -9,49 +9,49 @@ class DeepSearch(IContourDetector):
         self.printer = printer
         self.image = image
 
-    def detectContours(self):
-        min, max = self.analyseHistogram(self.image)
+    def detect_contours(self):
+        min, max = self.analyse_histogram(self.image)
 
-        allContours = self.runAllContours(min, max, self.image)
+        all_contours = self.run_all_contours(min, max, self.image)
 
-        return allContours
+        return all_contours
 
-    def analyseHistogram(self, image):
-        grayScale = self.greyScale(image)
+    def analyse_histogram(self, image):
+        gray_scale = self.grey_scale(image)
 
-        histogram = cv.calcHist([grayScale], [0], None, [256], [0, 256])
+        histogram = cv.calcHist([gray_scale], [0], None, [256], [0, 256])
 
         indices = np.nonzero(histogram)[0]
 
-        minIndex = indices.min()
+        min_index = indices.min()
 
-        maxIndex = indices.max()
+        max_index = indices.max()
 
-        return minIndex, maxIndex
+        return min_index, max_index
 
-    def runAllContours(self, min, max, image):
+    def run_all_contours(self, min, max, image):
 
-        allContours= []
+        all_contours= []
 
         blur = cv.GaussianBlur(image, (5, 5), 0)
 
-        greyScale = self.greyScale(blur)
+        grey_scale = self.grey_scale(blur)
 
         for i in range(min, max):
-            ret, thresholdedImage = cv.threshold(greyScale, i, 255, cv.THRESH_BINARY)
+            _, thresholded_image = cv.threshold(grey_scale, i, 255, cv.THRESH_BINARY)
 
-            contours, hierarchy = cv.findContours(thresholdedImage, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+            contours, _ = cv.findContours(thresholded_image, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
-            allContours.append(contours)
+            all_contours.append(contours)
 
 
-        flatContours = list(itertools.chain(*allContours))
+        flat_contours = list(itertools.chain(*all_contours))
 
-        return flatContours
+        return flat_contours
 
-    def greyScale(self, image):
+    def grey_scale(self, image):
         
-        greyScale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+        grey_scale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
-        return greyScale
+        return grey_scale
               

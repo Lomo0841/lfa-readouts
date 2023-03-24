@@ -6,11 +6,11 @@ from lfa_project.Test.HierarchicalSelectorTest import HierarchicalSelectorTest
 
 if __name__ == '__main__':
         
-    allTests = unittest.TestSuite()
-    allTests.addTest(unittest.TestLoader().loadTestsFromTestCase(ColorAveragorTest))
-    allTests.addTest(unittest.TestLoader().loadTestsFromTestCase(DeepSearchTest))
-    allTests.addTest(unittest.TestLoader().loadTestsFromTestCase(FilterOnConditionsTest))
-    allTests.addTest(unittest.TestLoader().loadTestsFromTestCase(HierarchicalSelectorTest))
+    all_tests = unittest.TestSuite()
+    all_tests.addTest(unittest.TestLoader().loadTestsFromTestCase(ColorAveragorTest))
+    all_tests.addTest(unittest.TestLoader().loadTestsFromTestCase(DeepSearchTest))
+    all_tests.addTest(unittest.TestLoader().loadTestsFromTestCase(FilterOnConditionsTest))
+    all_tests.addTest(unittest.TestLoader().loadTestsFromTestCase(HierarchicalSelectorTest))
 
-    unittest.TextTestRunner(verbosity=2).run(allTests)
+    unittest.TextTestRunner(verbosity=2).run(all_tests)
 

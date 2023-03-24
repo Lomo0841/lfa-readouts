@@ -2,7 +2,6 @@ import cv2 as cv
 import numpy as np
 import pupil_apriltags as apriltag
 from lfa_project.Interfaces.IRoiExtractor import IRoiExtractor
-import time as t
 
 class AprilTagsExtractor(IRoiExtractor):
 
@@ -13,75 +12,75 @@ class AprilTagsExtractor(IRoiExtractor):
         #self.config = config
 
 
-    def extractRois(self):
+    def extract_rois(self):
         #section = "CropRoi"
-        #x = self.config.getConfigInt(section, "x")
-        #y = self.config.getConfigInt(section, "y")
-        #h = self.config.getConfigInt(section, "h")
-        #w = self.config.getConfigInt(section, "w")
+        #x = self.config.get_config_int(section, "x")
+        #y = self.config.get_config_int(section, "y")
+        #h = self.config.get_config_int(section, "h")
+        #w = self.config.get_config_int(section, "w")
 
-        imageGreyScale = self.greyScale(self.image) 
+        image_grey_scale = self.grey_scale(self.image) 
         
-        deWarped = self.deWarp(self.image, imageGreyScale)
+        de_warped = self.de_warp(self.image, image_grey_scale)
         
-        #cropped = self.cropRoi(deWarped, x, y, h, w)
+        #cropped = self.crop_roi(de_warped, x, y, h, w)
 
-        self.printer.write_image(deWarped, "Roi")
+        self.printer.write_image(de_warped, "Roi")
 
-        return deWarped
+        return de_warped
     
-    def greyScale(self, image):
+    def grey_scale(self, image):
         
-        greyScale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+        grey_scale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
-        return greyScale
+        return grey_scale
     
-    def deWarp(self, originalImage, greyscale):
+    def de_warp(self, original_image, grey_scale):
 
-        detections = self.detectAprilTags(greyscale)
+        detections = self.detect_april_tags(grey_scale)
         
         if len(detections) < 4:
             raise Exception("Could not find all 4 AprilTags")
 
         for det in detections:
             if det.tag_id == 0:
-                upperLeft = det.corners[2].astype(int)
+                upper_left = det.corners[2].astype(int)
             if det.tag_id == 1:
-                upperRight = det.corners[3].astype(int)
+                upper_right = det.corners[3].astype(int)
             if det.tag_id == 2:
-                lowerLeft = det.corners[1].astype(int)
+                lower_left = det.corners[1].astype(int)
             if det.tag_id == 4: 
-                lowerRight = det.corners[0].astype(int)
+                lower_right = det.corners[0].astype(int)
 
         #https://theailearner.com/tag/cv2-warpperspective/
-        widthUpper = np.sqrt(((upperLeft[0] - upperRight[0]) ** 2) + ((upperLeft[1] - upperRight[1]) ** 2))
-        widthLower = np.sqrt(((lowerLeft[0] - lowerRight[0]) ** 2) + ((lowerLeft[1] - lowerRight[1]) ** 2))
-        maxWidth = max(int(widthUpper), int(widthLower))
+        width_upper = np.sqrt(((upper_left[0] - upper_right[0]) ** 2) + ((upper_left[1] - upper_right[1]) ** 2))
+        width_lower = np.sqrt(((lower_left[0] - lower_right[0]) ** 2) + ((lower_left[1] - lower_right[1]) ** 2))
+        max_width = max(int(width_upper), int(width_lower))
  
  
-        heightLeft = np.sqrt(((upperLeft[0] - lowerLeft[0]) ** 2) + ((upperLeft[1] - lowerLeft[1]) ** 2))
-        heightRight = np.sqrt(((lowerRight[0] - upperRight[0]) ** 2) + ((lowerRight[1] - upperRight[1]) ** 2))
-        maxHeight = max(int(heightLeft), int(heightRight))
+        height_left = np.sqrt(((upper_left[0] - lower_left[0]) ** 2) + ((upper_left[1] - lower_left[1]) ** 2))
+        height_right = np.sqrt(((lower_right[0] - upper_right[0]) ** 2) + ((lower_right[1] - upper_right[1]) ** 2))
+        max_height = max(int(height_left), int(height_right))
 
-        originalPoints = np.float32([upperLeft, lowerLeft, lowerRight, upperRight])
-        transformedPoints = np.float32([[0, 0], [0, maxHeight - 1], [maxWidth - 1, maxHeight - 1],[maxWidth - 1, 0]]) 
+        original_points = np.float32([upper_left, lower_left, lower_right, upper_right])
+        transformed_points = np.float32([[0, 0], [0, max_height - 1], [max_width - 1, max_height - 1],[max_width - 1, 0]]) 
 
-        transform = cv.getPerspectiveTransform(originalPoints, transformedPoints)
+        transform = cv.getPerspectiveTransform(original_points, transformed_points)
 
-        deWarpedImage = cv.warpPerspective(originalImage, transform,(maxWidth, maxHeight),flags=cv.INTER_LINEAR)
+        de_warped_image = cv.warpPerspective(original_image, transform,(max_width, max_height),flags=cv.INTER_LINEAR)
 
-        return deWarpedImage
+        return de_warped_image
 
 
-    def cropRoi(image, x, y, h, w):
+    def crop_roi(image, x, y, h, w):
 
         return image[y:y+h, x:x+w]
 
     
-    def detectAprilTags(self, greyscale):
+    def detect_april_tags(self, grey_scale):
 
         detector = apriltag.Detector("tag36h11")
 
-        detections = detector.detect(greyscale)
+        detections = detector.detect(grey_scale)
 
         return detections

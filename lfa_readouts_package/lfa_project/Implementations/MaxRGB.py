@@ -8,26 +8,26 @@ class MaxRGB(IWhiteBalancing):
         self.printer = printer
         self.image = image
 
-    def whiteBalance(self):
-        normalizedImg = self.normalize(self.image)
+    def white_balance(self):
+        normalized_img = self.normalize(self.image)
 
-        convertedImg = self.convert(normalizedImg)
+        converted_img = self.convert(normalized_img)
 
-        self.printer.write_image(convertedImg, "White balanced")
+        self.printer.write_image(converted_img, "White balanced")
 
-        return convertedImg
+        return converted_img
 
     def normalize(self, img):
         b, g, r = cv.split(img)
-        maxVals = np.maximum(np.maximum(r, g), b)
+        max_values = np.maximum(np.maximum(r, g), b)
 
-        rNorm = r / maxVals
-        gNorm = g / maxVals
-        bNorm = b / maxVals
+        r_norm = r / max_values
+        g_norm = g / max_values
+        b_norm = b / max_values
 
-        balancedImg = cv.merge((bNorm, gNorm, rNorm))
+        balanced_img = cv.merge((b_norm, g_norm, r_norm))
 
-        return balancedImg
+        return balanced_img
 
     def convert(self, img):
         converted = cv.convertScaleAbs(img * 255)

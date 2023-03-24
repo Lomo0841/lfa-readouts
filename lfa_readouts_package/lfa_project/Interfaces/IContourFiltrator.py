@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 class IContourFiltrator(ABC):
 
     @abstractmethod
-    def filterContours(self):
+    def filter_contours(self):
         pass

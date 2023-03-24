@@ -12,42 +12,42 @@ class HierarchicalSelectorTest(unittest.TestCase):
         self.contours = []
         self.printer = MagicMock()
 
-    def testSelectContourNoContours(self):
+    def test_select_contourn_no_contours(self):
         #Arrange
         selector = HierarchicalSelector(self.printer, self.image, self.contours)
 
         #Act and Assert
         with self.assertRaises(Exception) as e:
-            selector.selectContour()
+            selector.select_contour()
         self.assertEqual(str(e.exception), "No contours to select from after deepsearch. Terminating program.")
 
-    def testSelectContourOneContour(self):
+    def test_select_contour_one_contour(self):
         #Arrange
-        contour1 = np.array([[10,10],[50,10],[50,50],[10,50]])
-        self.contours.append(contour1)
+        contour_1 = np.array([[10,10],[50,10],[50,50],[10,50]])
+        self.contours.append(contour_1)
         selector = HierarchicalSelector(self.printer, self.image, self.contours)
 
         #Act
-        selectedContour = selector.selectContour()
+        selected_contour = selector.select_contour()
 
         #Assert
-        self.assertEqual(selectedContour.tolist(), self.contours[0].tolist())
+        self.assertEqual(selected_contour.tolist(), self.contours[0].tolist())
 
     #selectOuterMost() is implicitly tested here as well
-    def testSelectContourManyContours(self):
+    def test_select_contour_many_contours(self):
         #Arrange
-        contourLarger = np.array([[10,10],[50,10],[50,50],[10,50]])
-        contourSmaller = np.array([[20,20],[30,20],[30,30],[20,30]])
-        self.contours.append(contourLarger)
-        self.contours.append(contourSmaller)
+        contour_larger = np.array([[10,10],[50,10],[50,50],[10,50]])
+        contour_smaller = np.array([[20,20],[30,20],[30,30],[20,30]])
+        self.contours.append(contour_larger)
+        self.contours.append(contour_smaller)
         selector = HierarchicalSelector(self.printer, self.image, self.contours)
 
         #Act
-        outermostContour = selector.selectOutermost(self.contours)
+        outermost_contour = selector.select_outermost(self.contours)
 
         #Assert
-        self.assertIsNotNone(outermostContour)
-        self.assertEqual(outermostContour.tolist(), self.contours[0].tolist())
+        self.assertIsNotNone(outermost_contour)
+        self.assertEqual(outermost_contour.tolist(), self.contours[0].tolist())
 
 
 

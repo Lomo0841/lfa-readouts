@@ -59,20 +59,20 @@ class Context():
         self._whiteBalancingStrategy = value
 
     def executeRoiExtractorStrategy(self):
-        return self._roiExtractorStrategy.extractRois()
+        return self._roiExtractorStrategy.extract_rois()
     
     def executeContourDetectorStrategy(self):
-        return self._contourDetectorStrategy.detectContours()
+        return self._contourDetectorStrategy.detect_contours()
     
     def executeContourFiltratorStrategy(self):
-        return self._contourFiltratorStrategy.filterContours()
+        return self._contourFiltratorStrategy.filter_contours()
 
     def executeContourSelectorStrategy(self):
-        return self._contourSelectorStrategy.selectContour()
+        return self._contourSelectorStrategy.select_contour()
 
     def executeResultTranslatorStrategy(self):
-        return self._resultTranslatorStrategy.translateResult()
+        return self._resultTranslatorStrategy.translate_result()
     
     def executeWhiteBalancingStrategy(self):
-        return self._whiteBalancingStrategy.whiteBalance()
+        return self._whiteBalancingStrategy.white_balance()
     
