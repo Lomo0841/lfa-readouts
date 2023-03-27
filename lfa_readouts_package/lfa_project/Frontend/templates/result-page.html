@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+    <title>LFA Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}"> 
+{% endblock %}
+
+{% block body %}
+  
+  <div class="back-container">
+    <div class="front-container">
+      <div class="image-container">
+        <h1>Image of Final Contour</h1>
+        <img src="data:image/png;base64,{{ inputImage }}" id="lfa_image" alt="Final Contour"/>
+      </div>
+
+      <!-- https://stackoverflow.com/questions/379610/can-you-nest-html-forms -->
+      
+      <form id="return_form" action="/"></form>
+      
+      <div class="result-group">
+        <h1>RESULT:</h1>
+        <p><b>R</b>: {{red}}</p>
+        <p><b>G</b>: {{green}}</p>
+        <p><b>B</b>: {{blue}}</p>
+        <button form="return_form">Analyze New Image</button>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
