@@ -1,9 +1,7 @@
 import datetime
 import cv2 as cv
 import os
-import platform
 
-#EVERY CLASS IS GIVEN THE SAME PRINTING INSTANCE WHEN INSTANTIATED IN THE MAIN METHOD
 class Printing():
 
     def __init__(self):
@@ -15,10 +13,7 @@ class Printing():
         
         folder_name = now.strftime('%Y-%m-%d_%H-%M-%S')
         
-        if platform.system() == 'Windows':
-            folderPath = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
-        else:
-            folderPath = os.path.join(os.getcwd(), "lfa_project", "Results", folder_name)
+        folderPath = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
         
         os.makedirs(folderPath, exist_ok=True)
         

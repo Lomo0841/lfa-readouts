@@ -4,7 +4,7 @@ import numpy as np
 from unittest.mock import MagicMock
 from lfa_project.Implementations.HierarchicalSelector import HierarchicalSelector
 
-class TestHierarchicalSelector(unittest.TestCase):
+class HierarchicalSelectorTest(unittest.TestCase):
     
     def setUp(self):
         #Arrange
@@ -17,9 +17,9 @@ class TestHierarchicalSelector(unittest.TestCase):
         selector = HierarchicalSelector(self.printer, self.image, self.contours)
 
         #Act and Assert
-        with self.assertRaises(SystemExit) as cm:
+        with self.assertRaises(Exception) as e:
             selector.selectContour()
-        self.assertEqual(cm.exception.code, 1)
+        self.assertEqual(str(e.exception), "No contours to select from after deepsearch. Terminating program.")
 
     def testSelectContourOneContour(self):
         #Arrange

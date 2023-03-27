@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import MagicMock
 from lfa_project.Implementations.DeepSearch import DeepSearch
 
-class TestDeepSearch(unittest.TestCase):
+class DeepSearchTest(unittest.TestCase):
 
     def setUp(self):
         #Arrange

@@ -3,6 +3,7 @@ import time as t
 import platform 
 from lfa_project.Implementations.AprilTagsExtractor import AprilTagsExtractor
 from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresholdContourDetector
+from lfa_project.Implementations.AltContourDetector import AltContourDetector
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
 from lfa_project.Implementations.HierarchicalSelector import HierarchicalSelector
 from lfa_project.Implementations.ColorAveragor import ColorAveragor
@@ -11,12 +12,12 @@ from lfa_project.Implementations.DeepSearch import DeepSearch
 from lfa_project.Utility.Printing import Printing
 from lfa_project.Utility.ConfigReader import ConfigReader
 
-imageName = "squaregreen.png"
+imageName = "blurryorange.png"
 
 if platform.system() == 'Windows':
-    inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + imageName)
+    inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\TwoLeds\\" + imageName)
 else:
-    inputImage = cv.imread("lfa_project/Images/" + imageName)
+    inputImage = cv.imread("lfa_readouts_package/lfa_project/Images/TwoLeds/" + imageName)
 
 
 #Setting up instances
@@ -34,9 +35,10 @@ context.roiExtractorStrategy = AprilTagsExtractor(printer, inputImage)
 roi = context.executeRoiExtractorStrategy()
 
 stop = t.time()
-print(stop-start)
+print(stop - start)
 
-context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
+#context.contourDetectorStrategy = BlurThresholdContourDetector(printer, config, roi.copy())
+context.contourDetectorStrategy = AltContourDetector(printer, config, roi.copy())
 contours = context.executeContourDetectorStrategy()
 
 context.contourFiltratorStrategy = FilterOnConditions(printer, config, roi.copy(), contours)

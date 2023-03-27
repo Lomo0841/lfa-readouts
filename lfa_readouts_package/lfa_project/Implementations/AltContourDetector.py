@@ -1,12 +1,13 @@
 import cv2 as cv
 from lfa_project.Interfaces.IContourDetector import IContourDetector
 
-class BlurThresholdContourDetector(IContourDetector):
+class AltContourDetector(IContourDetector):
 
     def __init__(self, printer, config, image):
         self.printer = printer
         self.image = image
         self.config = config
+        
 
     def detectContours(self):
         section = "ContourDetection"
@@ -25,7 +26,7 @@ class BlurThresholdContourDetector(IContourDetector):
         return contours
 
     def blur(self, image, size):
-        blur = cv.GaussianBlur(image, (size, size), 0)
+        blur = cv.medianBlur(image, size)
 
         return blur
 
@@ -35,10 +36,8 @@ class BlurThresholdContourDetector(IContourDetector):
         ret, thresholdedImage = cv.threshold(greyScale, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
         return thresholdedImage
-    
+
     def findContours(self, thresholdedImage):
-        contours, hierarchy = cv.findContours(thresholdedImage, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv.findContours(thresholdedImage, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
         return contours
-
-
