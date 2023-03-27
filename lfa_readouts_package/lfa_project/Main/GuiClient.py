@@ -1,4 +1,3 @@
-import cv2 as cv
 from lfa_project.Implementations.AprilTagsExtractor import AprilTagsExtractor
 from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresholdContourDetector
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
@@ -54,7 +53,3 @@ class GuiClient():
         avg_color = averagor.average_color()
 
         return (selected_contour, avg_color)
-
-#cv.waitKey(0)
-
-#cv.destroyAllWindows()
