@@ -12,13 +12,11 @@ from lfa_project.Utility.ConfigReader import ConfigReader
 class GuiClient():
         
     def __init__(self, input_image):
-
     
         #Setting up instances
         self.context = Context()
 
         self.printer = Printer()
-
 
         self.input_image = input_image
 
@@ -34,7 +32,7 @@ class GuiClient():
     def run_algorithm_on_roi(self, roi):
         self.config = ConfigReader()
 
-        self.context.contourDetectorStrategy = BlurThresholdContourDetector(self.printer, roi.copy())
+        self.context.contourDetectorStrategy = BlurThresholdContourDetector(self.printer, self.config ,roi.copy())
         contours = self.context.executeContourDetectorStrategy()
 
         self.context.contourFiltratorStrategy = FilterOnConditions(self.printer, self.config, roi.copy(), contours)
@@ -52,7 +50,9 @@ class GuiClient():
 
         averagor = ColorAveragor(self.printer, roi.copy(), selected_contour)
 
-        averagor.average_color()
+        avg_color = averagor.average_color()
+
+        return (selected_contour, avg_color)
 
 #cv.waitKey(0)
 

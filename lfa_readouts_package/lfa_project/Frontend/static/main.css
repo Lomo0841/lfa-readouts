@@ -1,9 +1,12 @@
 /* Global styles */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+/* Set the font family for the body element */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
+  font-family: 'Open Sans',  sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
   /* Container styles */
   .container {
@@ -20,7 +23,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
     width: 80%;
     max-width: 1000px;
     background-color: #fff;
@@ -34,14 +36,22 @@ body {
   .image-container {
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative; 
+    height: 100%; 
   }
 
-  .image-container img {
+  
+  .lfa-image {
     max-width: 100%;
     max-height: 100%;
+    border-radius: 5px;
+    border: 1px solid black;
   }
+  
+  
 
   /* Form styles */
   .form-group {
@@ -51,6 +61,15 @@ body {
     align-items: flex-start;
     justify-content: center;
     padding: 0 20px;
+    position: relative; 
+    height: 100%; 
+  }
+
+  h2 {
+    text-align: center;
+    width: 100%;
+    font-size: 28px;
+    margin-top: 0;
   }
 
   input[type="number"] {
@@ -73,11 +92,72 @@ body {
     margin: 5px 10px;
     border-radius: 5px;
     border: none;
-    background-color: #007bff;
+    background-color: #1875b3;
     color: #fff;
     font-size: 14px;
     cursor: pointer;
   }
+
+  button img {
+    vertical-align: middle;
+  }
+
+  button:hover {
+    background-color: #07609a;
+  }
+
+  .help-div {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: grey;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  .help-div:hover::before {
+    content: "Could not find description";
+    display: block;
+    position: absolute;
+    top: -50%;
+    left: 150%;
+    
+    width: 200px;
+    height: auto;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    line-height: 20px;
+    text-align: center;
+    color: #555;
+    z-index: 9999;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  #center-help:hover::before {
+    content: "The expected centroid (or center) of the contour, specified by its X and Y coordinates.";
+    }
+    
+    #dist-help:hover::before {
+    content: "The maximum allowed distance from the calculated centroid of the contour to the expected centroid, specified in pixels. If the distance exceeds this value, the contour will be filtered out.";
+    }
+    
+    #area-help:hover::before {
+    content: "The minimum area of a contour, specified in pixels. If the area of a contour is less than this value, it will be filtered out.";
+    }
+    
+    #defect-help:hover::before {
+    content: "The maximum allowed depth of a convexity defect, specified in pixels. If a contour contains convexity defects deeper than this value, it will be filtered out.";
+    }
 
   label {
     font-weight: bold;
@@ -91,7 +171,26 @@ body {
     justify-content: center;
   }
 
-  .input-group-x-y input[type="number"] {
-    width: calc(35%);
-    margin-right: 10px;
+  .input-group-x-y input {
+    margin-left: 20px;
   }
+
+  .retake-button {
+    display: flex;
+    flex-direction: row;
+    width: 100% ;
+    justify-content: center;
+    position: absolute;
+    bottom: 0; 
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: row;
+    width: 100% ;
+    justify-content: center;
+    margin-top: auto;
+    bottom: 0; 
+  }
+
+ 

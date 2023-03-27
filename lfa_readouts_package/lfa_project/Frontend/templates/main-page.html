@@ -2,45 +2,86 @@
 
 {% block head %} 
     <title>LFA Analysis</title>
-   
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"> 
 {% endblock %}
 
 {% block body %}
-  
+  <!-- UI: https://sites.google.com/site/prakashbebington/multimedia-development-resources/gui-design-principles -->
   <div class="container">
     <div class="form-container">
       <div class="image-container">
         
         {% if isVideo %}
-        <img src="{{ url_for('live_image') }}" alt="LFA image" />
+        <form id="cap_form" method="GET" action="{{ url_for('cap_image') }}"></form> 
+        <form id="load_form" method="POST" action="{{ url_for('load_image') }}" enctype="multipart/form-data"></form> 
+
+        <img class="lfa-image" src="{{ url_for('live_image') }}" alt="LFA image" />
+        <div class="button-group">
+          <button type="submit" form="cap_form">
+            <img src="{{ url_for('static', filename='assets/camera_icon.svg') }}" alt="Update icon">
+            Capture Image
+          </button>
+          <!-- <button type="submit" form="load_form">Choose Image File</button> -->
+          <input type="file" name="file" id="file_input" accept="image/*" style="display:none" form="load_form" />
+          <button type="button" onclick="document.getElementById('file_input').click()">
+            <img src="{{ url_for('static', filename='assets/folder_icon.svg') }}" alt="Folder icon">
+            Select Image
+          </button>
+        </div>
         {% else %}
-        <img src="data:image/png;base64,{{ inputImage }}" id="lfa_image" alt="LFA image"/>
+        <form id="reset_form" action="{{ url_for('reset') }}"></form>
+
+        <img class="lfa-image" src="data:image/png;base64,{{ inputImage }}" id="lfa_image" alt="LFA image"/>
+        <div class="retake-button">
+          <button type="submit" form="reset_form">
+            <img src="{{ url_for('static', filename='assets/redo_icon.svg') }}" alt="Redo icon">
+            Retake Image
+          </button>
+        </div>
         {% endif %}
       </div>
 
       <!-- https://stackoverflow.com/questions/379610/can-you-nest-html-forms -->
       
       <form id="post_form"  method="POST" action="{{ url_for('post_data') }}"></form>
-      <form id="cap_form" method="GET" action="{{ url_for('cap_image') }}"></form></form> 
-      <form id="algo_form" method="GET" action="{{ url_for('run_algorithm') }}"></form></form> 
+      <form id="algo_form" method="GET" action="{{ url_for('run_algorithm') }}"></form> 
       
       <div class="form-group">
-        <label for="center">Center (x,y)</label>
+        <h2>Calibrate Filters</h2>
+        <label for="center">
+          Expected Center (x,y) 
+          <div id="center-help" class="help-div">?</div>
+        </label>
+        
         <div class="input-group-x-y">
           <input type="number" name="center_x" id="center_x" value="{{x}}" form="post_form"/>
           <input type="number" name="center_y" id="center_y" value="{{y}}" form="post_form"/>
         </div>
         
-        <label for="max_dist">Maximum Center Distance</label>
+        <label for="max_dist">
+          Maximum Expected Center Distance 
+          <div id="dist-help" class="help-div">?</div>
+        </label>
         <input type="number" name="max_dist" id="max_dist" value="{{maxDist}}" form="post_form"/>
-        <label for="min_area">Minimum Area</label>
+        <label for="min_area">
+          Minimum Area
+          <div id="area-help" class="help-div">?</div>
+        </label>
         <input type="number" name="min_area" id="min_area" value="{{minArea}}" form="post_form"/>
-        <label for="max_defect">Maximum Convexity Defect</label>
-        <input type="number" name="max_defect" value="{{maxDefect}}" form="post_form"/>
-        <div class="input-group-x-y">
-          <button type="submit" id="capture_btn" form="cap_form">Capture Image</button>
-          <button type="submit" form="post_form">Update Config File</button>
-          <button type="submit" form="algo_form">Run Algorithm</button>
+        <label for="max_defect">
+          Maximum Convexity Defect
+          <div id="defect-help" class="help-div">?</div>
+        </label>
+        <input type="number" name="max_defect" id="max_defect" value="{{maxDefect}}" form="post_form"/>
+        <div class="button-group">
+          <button type="submit" form="post_form">
+            <img src="{{ url_for('static', filename='assets/update_icon.svg') }}" alt="Update icon">
+            Update Config File
+          </button>
+          <button type="submit" form="algo_form">
+            <img src="{{ url_for('static', filename='assets/action_icon.svg') }}" alt="Action icon">
+            Run Algorithm
+          </button>
         </div>
       </div>
     
@@ -51,31 +92,42 @@
   <script>
     //https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
 
+    /* var fileBtn = document.getElementById('file_btn');
+    fileBtn.addEventListener('click', function(event) {
+      document.getElementById('file_input').click()
+      document.getElementById('load_form').submit();
+    }); */
+    fileInput = document.getElementById('file_input')
+    if (fileInput){
+      fileInput.addEventListener('change', function(){
+              document.getElementById('load_form').submit();
+           });
+    }
+
     addDrawOnEnter(document.getElementById("center_x"))
     addDrawOnEnter(document.getElementById("center_y"))
     addDrawOnEnter(document.getElementById("min_area"))
     addDrawOnEnter(document.getElementById("max_dist"))
-
-
-    /* var captureBtn = document.getElementById('capture_btn');
-    captureBtn.
-    captureBtn.addEventListener('click', function(event) {
-        event.preventDefault();
-
-
-    }); */
-    
-    
+    //DrawOnEnter Convexity Defect?
+    document.getElementById("max_defect").addEventListener("keypress", function(event) {
+            // If the user presses the "Enter" key on the keyboard
+            if (event.key === "Enter") {
+                // Cancel the default action, if needed
+                event.preventDefault();            
+              }
+            });
     var image = document.getElementById('lfa_image');
-    image.addEventListener('click', function(event) {
-        var x = event.offsetX;
-        var y = event.offsetY;
-
-        document.getElementById('center_x').value = x;
-        document.getElementById('center_y').value = y;
-        drawOnImage("data:image/png;base64,{{ inputImage }}", x, y);
-    });
+    if(image){
+      image.addEventListener('click', function(event) {
+          var x = event.offsetX;
+          var y = event.offsetY;
   
+          document.getElementById('center_x').value = x;
+          document.getElementById('center_y').value = y;
+          drawOnImage("data:image/png;base64,{{ inputImage }}", x, y);
+      });
+    }
+
 
     function drawOnImage(imageUrl, centerX, centerY) {
 // Create a new image element and load the image from the URL
