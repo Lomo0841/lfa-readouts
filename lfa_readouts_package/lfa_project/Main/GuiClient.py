@@ -27,7 +27,6 @@ class GuiClient():
 
         self.printer = Printing()
 
-
         self.inputImage = inputImage
 
         #THIS SHOULD BE OUTSOURCED TO THE TAKE PICTURE CLASS
@@ -61,7 +60,9 @@ class GuiClient():
 
         averagor = ColorAveragor(self.printer, roi.copy(), selectedContour)
 
-        averagor.averageColor()
+        avgColor = averagor.averageColor()
+
+        return (selectedContour, avgColor)
 
 #cv.waitKey(0)
 
