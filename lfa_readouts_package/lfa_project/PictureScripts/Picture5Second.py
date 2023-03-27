@@ -1,6 +1,6 @@
 import cv2 as cv
 import time as t
-from lfa_project.Utility.Printing import Printing
+from lfa_project.Utility.Printer import Printing
 
 printer = Printing()
 

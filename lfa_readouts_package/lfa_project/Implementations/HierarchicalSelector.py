@@ -11,24 +11,24 @@ class HierarchicalSelector(IContourSelector):
         self.image = image
         self.contours = contours
         
-    def selectContour(self):
-        selectedContour = None
+    def select_contour(self):
+        selected_contour = None
 
         if len(self.contours) == 0:            
             raise Exception("No contours to select from after deepsearch. Terminating program.")
 
         if len(self.contours) == 1:
-            selectedContour = self.contours[0]
+            selected_contour = self.contours[0]
         else:
-            selectedContour = self.selectOutermost(self.contours)
+            selected_contour = self.select_outermost(self.contours)
 
-        self.printer.write_image(self.image, "SelectedContour", selectedContour)
+        self.printer.write_image(self.image, "SelectedContour", selected_contour)
 
-        return selectedContour
+        return selected_contour
 
-    def selectOutermost(self, contours):
-        contourAreas = map(lambda cnt : cv.contourArea(cnt), contours)
+    def select_outermost(self, contours):
+        contour_areas = map(lambda cnt : cv.contourArea(cnt), contours)
 
-        largestContour = np.argmax(list(contourAreas))
+        largest_contour = np.argmax(list(contour_areas))
 
-        return contours[largestContour]
+        return contours[largest_contour]

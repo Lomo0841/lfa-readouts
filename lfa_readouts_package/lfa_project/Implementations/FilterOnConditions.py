@@ -11,51 +11,48 @@ class FilterOnConditions(IContourFiltrator):
         self.contours = contours
         self.config = config
     
-    def filterContours(self):
+    def filter_contours(self):
         section = "FiltrationVariables"
-        minArea = self.config.getConfigInt(section, "minAreaOfContour")
-        maxDepth = self.config.getConfigInt(section, "maxDepthOfConvex")
-        expectedCentrumX = self.config.getConfigInt(section, "expectedCentrumX")
-        expectedCentrumY = self.config.getConfigInt(section, "expectedCentrumY")
-        maxDistanceFromCentrum = self.config.getConfigInt(section, "maxDistanceFromCentrum")
+        min_area = self.config.get_config_int(section, "minAreaOfContour")
+        max_depth = self.config.get_config_int(section, "maxDepthOfConvex")
+        expected_centrum_x = self.config.get_config_int(section, "expectedCentrumX")
+        expected_centrum_y = self.config.get_config_int(section, "expectedCentrumY")
+        max_distance_from_centrum = self.config.get_config_int(section, "maxDistanceFromCentrum")
 
-        areaFiltered = self.areaFilter(self.contours, minArea)
+        area_filtered = self.area_filter(self.contours, min_area)
 
-        touchEdgeFiltered = self.touchEdgeFilter(areaFiltered)
-        
-        convexityDefectFiltered = self.convexityDefectFilter(touchEdgeFiltered, maxDepth)
-     
-        centroidDistanceFiltered = self.centroidDistanceFilter(convexityDefectFiltered, expectedCentrumX, expectedCentrumY, maxDistanceFromCentrum)
-    
+        touch_edge_filtered = self.touch_edge_filter(area_filtered)
+
+        convexity_defect_filtered = self.convexity_defect_filter(touch_edge_filtered, max_depth)
+
+        centroid_distance_filtered = self.centroid_distance_filter(convexity_defect_filtered, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
+
         #Do we need this?
         #pointFiltered = self.pointFilter(convexityDefectFiltered, points)
 
-        self.printer.write_image(self.image, "FilteredContours", centroidDistanceFiltered)
+        self.printer.write_image(self.image, "FilteredContours", centroid_distance_filtered)
 
-        return centroidDistanceFiltered
+        return centroid_distance_filtered
 
-    #Where does it recieve the points from? 
-    def pointFilter(self, contours, points):
-        filteredContours = []
+    def point_filter(self, contours, points):
+        filtered_contours = []
         for cnt in contours:
             if all(cv.pointPolygonTest(cnt, p, measureDist=False) >= 0 for p in points):
-                filteredContours.append(cnt)
-        return filteredContours
+                filtered_contours.append(cnt)
+        return filtered_contours
 
-    
-
-    def areaFilter(self, contours, minArea):
-        filteredContours = []
+    def area_filter(self, contours, min_area):
+        filtered_contours = []
         
         for cnt in contours:
             area = cv.contourArea(cnt)
-            if area > minArea:
-                filteredContours.append(cnt)
+            if area > min_area:
+                filtered_contours.append(cnt)
             
-        return filteredContours
+        return filtered_contours
 
-    def touchEdgeFilter(self, contours):
-        filteredContours = []
+    def touch_edge_filter(self, contours):
+        filtered_contours = []
 
         height, width = self.image.shape[:2]
 
@@ -63,101 +60,59 @@ class FilterOnConditions(IContourFiltrator):
             x = cnt[:, 0][:, 0]
             y = cnt[:, 0][:, 1]
 
-            maxX = x[np.argmax(x)]
-            minX = x[np.argmin(x)]
-            maxY = y[np.argmax(y)]
-            minY = y[np.argmin(y)]
+            max_x = x[np.argmax(x)]
+            min_x = x[np.argmin(x)]
+            max_y = y[np.argmax(y)]
+            min_y = y[np.argmin(y)]
 
-            if minX > 0 and maxX < width and minY > 0 and maxY < height:
-                filteredContours.append(cnt)
+            if min_x > 0 and max_x < width and min_y > 0 and max_y < height:
+                filtered_contours.append(cnt)
 
-        return filteredContours
+        return filtered_contours
 
-    def convexityDefectFilter(self, contours, maxDepth):
+    def convexity_defect_filter(self, contours, max_depth):
             
-        filteredContours = []
+        filtered_contours = []
 
         for cnt in contours:
             hull = cv.convexHull(cnt, returnPoints=False)
             
             try:
-                self.defectCheck(maxDepth, filteredContours, cnt, hull)
+                self.defect_check(max_depth, filtered_contours, cnt, hull)
             except:
                 hull[::-1].sort(axis=0)
-                self.defectCheck(maxDepth, filteredContours, cnt, hull)
+                self.defect_check(max_depth, filtered_contours, cnt, hull)
 
-        return filteredContours
+        return filtered_contours
 
-    def defectCheck(self, maxDepth, filteredContours, cnt, hull):
+    def defect_check(self, max_depth, filtered_contours, cnt, hull):
         defects = cv.convexityDefects(cnt, hull)
 
         if defects is not None and len(defects) > 0:
-            maxDefect = np.max(defects[:, 0, 3])/256
-            if maxDefect <= maxDepth:
-                filteredContours.append(cnt)
+            max_defect = np.max(defects[:, 0, 3])/256
+
+            if max_defect <= max_depth:
+                filtered_contours.append(cnt)
         else:
-            filteredContours.append(cnt)
+            filtered_contours.append(cnt)
 
     
-    def centroidDistanceFilter(self, contours, expectedCentrumX, expectedCentrumY, maxDistanceFromCentrum):
-        filteredContours = []
-        cx = 0 
-        cy = 0
+    def centroid_distance_filter(self, contours, expected_centrum_x, expected_centrum_y, max_distance_from_centrum):
+        filtered_contours = []
+        c_x = 0 
+        c_y = 0
 
         for cnt in contours: 
             m = cv.moments(cnt)
         
 
             if m['m00'] != 0:
-                cx = int(m['m10']/m['m00'])
-                cy = int(m['m01']/m['m00'])
-               
-            distance = math.sqrt((cx - expectedCentrumX)**2 + (cy - expectedCentrumY)**2)
+                c_x = int(m['m10']/m['m00'])
+                c_y = int(m['m01']/m['m00'])
+
+            distance = math.sqrt((c_x - expected_centrum_x)**2 + (c_y - expected_centrum_y)**2)
             
-            if distance <= maxDistanceFromCentrum:
-                filteredContours.append(cnt)
+            if distance <= max_distance_from_centrum:
+                filtered_contours.append(cnt)
        
-        return filteredContours
-    
-
-"""         filteredContours = []
-
-        for cnt in contours:
-            hull = cv.convexHull(cnt, returnPoints=False)
-            defects = cv.convexityDefects(cnt, hull)
-
-            if defects is not None and len(defects) > 0:
-                maxDefect = np.max(defects[:, 0, 3])
-
-                if maxDefect <= maxDepth:
-                    filteredContours.append(cnt)
-
-            else:
-
-                filteredContours.append(cnt)
-
-        return filteredContours """
-
-
-""" for cnt in contours:
-            x = cnt[:, 0][:, 0]
-            y = cnt[:, 0][:, 1]
-            flag = False
-        
-            for value in x:
-                if value <= 0 or value >= width: 
-                    flag = True
-                    break
-                
-            if flag:
-                continue
-
-            for value in y:
-                if value <= 0 or value >= height:
-                    flag = True
-                    break
-                
-            if flag:
-                continue
-    
-            filteredContours.append(cnt) """
+        return filtered_contours

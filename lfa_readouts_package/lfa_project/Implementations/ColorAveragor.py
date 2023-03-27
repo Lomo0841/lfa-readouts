@@ -8,15 +8,15 @@ class ColorAveragor():
         self.image = image
         self.contour = contour
 
-    def averageColor(self):
+    def average_color(self):
         mask = np.zeros(self.image.shape[:2], np.uint8)
 
         cv.drawContours(mask, [self.contour], 0, 255, -1)
 
-        maskedImage = cv.bitwise_and(self.image, self.image, mask=mask)
+        masked_image = cv.bitwise_and(self.image, self.image, mask=mask)
 
-        avgColor = cv.mean(maskedImage, mask=mask)
+        avg_color = cv.mean(masked_image, mask=mask)
 
-        self.printer.write_file(str(avgColor))
+        self.printer.write_file(str(avg_color))
 
-        return avgColor
+        return avg_color

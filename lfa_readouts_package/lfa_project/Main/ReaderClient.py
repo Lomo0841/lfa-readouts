@@ -1,5 +1,4 @@
 import cv2 as cv
-import time as t
 import platform 
 from lfa_project.Implementations.AprilTagsExtractor import AprilTagsExtractor
 from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresholdContourDetector
@@ -9,36 +8,32 @@ from lfa_project.Implementations.HierarchicalSelector import HierarchicalSelecto
 from lfa_project.Implementations.ColorAveragor import ColorAveragor
 from lfa_project.Implementations.Context import Context
 from lfa_project.Implementations.DeepSearch import DeepSearch
-from lfa_project.Utility.Printing import Printing
+from lfa_project.Utility.Printer import Printer
 from lfa_project.Utility.ConfigReader import ConfigReader
 
-imageName = "blurryorange.png"
+image_name = "blurryorange.png"
 
 if platform.system() == 'Windows':
-    inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\TwoLeds\\" + imageName)
+    input_image = cv.imread("lfa_readouts_package\lfa_project\Images\TwoLeds\\" + image_name)
 else:
-    inputImage = cv.imread("lfa_readouts_package/lfa_project/Images/TwoLeds/" + imageName)
+    input_image = cv.imread("lfa_readouts_package/lfa_project/Images/TwoLeds/" + image_name)
 
 
 #Setting up instances
 context = Context()
 
-printer = Printing()
+printer = Printer()
 
 config = ConfigReader()
 
 #THIS SHOULD BE OUTSOURCED TO THE TAKE PICTURE CLASS
-printer.write_image(inputImage, "OriginalImage")
+printer.write_image(input_image, "OriginalImage")
 
-start = t.time()
-context.roiExtractorStrategy = AprilTagsExtractor(printer, inputImage)
+context.roiExtractorStrategy = AprilTagsExtractor(printer, input_image)
 roi = context.executeRoiExtractorStrategy()
 
-stop = t.time()
-print(stop - start)
-
-#context.contourDetectorStrategy = BlurThresholdContourDetector(printer, config, roi.copy())
-context.contourDetectorStrategy = AltContourDetector(printer, config, roi.copy())
+context.contourDetectorStrategy = BlurThresholdContourDetector(printer, config, roi.copy())
+#context.contourDetectorStrategy = AltContourDetector(printer, config, roi.copy())
 contours = context.executeContourDetectorStrategy()
 
 context.contourFiltratorStrategy = FilterOnConditions(printer, config, roi.copy(), contours)
@@ -55,8 +50,9 @@ context.contourSelectorStrategy = HierarchicalSelector(printer, roi.copy(), filt
 selectedContour = context.executeContourSelectorStrategy()
 
 averagor = ColorAveragor(printer, roi.copy(), selectedContour)
+averagor.average_color()
 
-averagor.averageColor()
+print("You made it to the final statement.")
 
 #cv.waitKey(0)
 

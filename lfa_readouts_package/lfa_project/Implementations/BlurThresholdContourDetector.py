@@ -8,17 +8,17 @@ class BlurThresholdContourDetector(IContourDetector):
         self.image = image
         self.config = config
 
-    def detectContours(self):
+    def detect_contours(self):
         section = "ContourDetection"
-        kernelSize = self.config.getConfigInt(section, "kernelSize")
+        kernel_size = self.config.get_config_int(section, "kernelSize")
 
-        blurredImage = self.blur(self.image, kernelSize)
+        blurred_image = self.blur(self.image, kernel_size)
 
-        thresholdedImage = self.threshold(blurredImage)
+        thresholded_image = self.threshold(blurred_image)
 
-        self.printer.write_image(thresholdedImage, "ThresholdedImage")
+        self.printer.write_image(thresholded_image, "ThresholdedImage")
 
-        contours = self.findContours(thresholdedImage)
+        contours = self.find_contours(thresholded_image)
 
         self.printer.write_image(self.image, "AllContours", contours)
 
@@ -30,14 +30,14 @@ class BlurThresholdContourDetector(IContourDetector):
         return blur
 
     def threshold(self, blur):
-        greyScale = cv.cvtColor(blur, cv.COLOR_BGR2GRAY)
+        grey_scale = cv.cvtColor(blur, cv.COLOR_BGR2GRAY)
 
-        ret, thresholdedImage = cv.threshold(greyScale, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+        ret, thresholded_image = cv.threshold(grey_scale, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
-        return thresholdedImage
+        return thresholded_image
     
-    def findContours(self, thresholdedImage):
-        contours, hierarchy = cv.findContours(thresholdedImage, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    def find_contours(self, thresholded_image):
+        contours, _ = cv.findContours(thresholded_image, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
         return contours
 

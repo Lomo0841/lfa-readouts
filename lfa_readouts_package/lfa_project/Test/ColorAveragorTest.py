@@ -13,15 +13,15 @@ class ColorAveragorTest(unittest.TestCase):
         self.image[:, :, 1] = 255
         self.contour = np.array([[10, 10], [90, 10], [90, 90], [10, 90]], dtype=np.int32)
 
-    def testColorAveragorGreen(self):
+    def test_color_averagor_green(self):
         #Arrange
         mask = np.zeros(self.image.shape[:2], np.uint8)
         cv.drawContours(mask, [self.contour], 0, 255, -1)
         self.image[mask == 255] = (0, 255, 0)
-        colorAveragor = ColorAveragor(self.printer, self.image, self.contour)
+        color_averagor = ColorAveragor(self.printer, self.image, self.contour)
         
         #Act
-        average = colorAveragor.averageColor()
+        average = color_averagor.average_color()
         
         #Assert
         self.assertAlmostEqual(average, (0.0, 255.0 ,0.0 ,0.0))

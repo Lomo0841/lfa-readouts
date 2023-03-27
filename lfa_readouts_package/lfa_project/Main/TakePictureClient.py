@@ -6,7 +6,7 @@ from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresho
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
 from lfa_project.Implementations.HierarchicalSelector import HierarchicalSelector
 from lfa_project.Implementations.ColorAveragor import ColorAveragor
-from lfa_project.Utility.Printing import Printing
+from lfa_project.Utility.Printer import Printing
 from lfa_project.Implementations.Context import Context
 
 cam = cv.VideoCapture(0)
@@ -36,13 +36,13 @@ contours = context.executeContourDetectorStrategy()
 #filtratedContours = context.executeContourFiltratorStrategy()
 
 filtrator = FilterOnConditions(printer, roi.copy(), contours)
-filtratedContours = filtrator.touchEdgeFilter(contours, height, width)
+filtratedContours = filtrator.touch_edge_filter(contours, height, width)
 
 context.contourSelectorStrategy = HierarchicalSelector(printer, roi.copy(), filtratedContours)
 selectedContour = context.executeContourSelectorStrategy()
 
 averagor = ColorAveragor(printer, roi.copy(), selectedContour)
-averagor.averageColor()
+averagor.average_color()
 
 print(t.time()-start)
 #cv.waitKey(0)

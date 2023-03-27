@@ -1,6 +1,5 @@
 from lfa_project.Interfaces.IWhiteBalancing import IWhiteBalancing
 import cv2 as cv
-import numpy as np
 
 class GreyWorld(IWhiteBalancing):
 
@@ -8,7 +7,7 @@ class GreyWorld(IWhiteBalancing):
         self.printer = printer
         self.image = image
 
-    def whiteBalance(self):
+    def white_balance(self):
         balanced = self.normalize(self.image)
 
         self.printer.write_image(balanced, "White balanced")
@@ -16,20 +15,20 @@ class GreyWorld(IWhiteBalancing):
         return balanced
 
     def normalize(self, img):
-        labImg = cv.cvtColor(img, cv.COLOR_BGR2LAB)
+        lab_img = cv.cvtColor(img, cv.COLOR_BGR2LAB)
 
-        lMean, aMean, bMean, _ = cv.mean(labImg)
+        l_mean, a_mean, b_mean, _ = cv.mean(lab_img)
 
-        lScale = 128 / lMean
-        aScale = 128 / aMean
-        bScale = 128 / bMean
+        l_scale = 128 / l_mean
+        a_scale = 128 / a_mean
+        b_scale = 128 / b_mean
 
-        labImg[:, :, 0] = cv.multiply(labImg[:, :, 0], lScale)
-        labImg[:, :, 1] = cv.multiply(labImg[:, :, 1], aScale)
-        labImg[:, :, 2] = cv.multiply(labImg[:, :, 2], bScale)
+        lab_img[:, :, 0] = cv.multiply(lab_img[:, :, 0], l_scale)
+        lab_img[:, :, 1] = cv.multiply(lab_img[:, :, 1], a_scale)
+        lab_img[:, :, 2] = cv.multiply(lab_img[:, :, 2], b_scale)
 
-        balancedImg = cv.cvtColor(labImg, cv.COLOR_LAB2BGR)
+        balanced_img = cv.cvtColor(lab_img, cv.COLOR_LAB2BGR)
 
-        return balancedImg
+        return balanced_img
 
 

@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 class IContourDetector(ABC):
 
     @abstractmethod
-    def detectContours(self):
+    def detect_contours(self):
         pass

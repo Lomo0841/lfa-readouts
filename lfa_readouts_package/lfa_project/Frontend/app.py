@@ -78,7 +78,7 @@ def run_algorithm():
     try:
         if client is None:
             raise Exception("No valid image to analyze. Try capturing or choosing a new image")
-        result = client.runTheAlgorithmToFindTheContoursAndThenTheColorAndThenTheResult(frame)
+        result = client.run_algorithm_on_roi(frame)
         client = None
         cv.drawContours(frame, result[0], -1, (0, 255, 0), 3)
 
@@ -124,11 +124,12 @@ def post_data():
     minArea = request.form['min_area']
     maxDefect = request.form['max_defect']
     
-    config.writeToConfig(section, "expectedCentrumX", x)
-    config.writeToConfig(section, "expectedCentrumY", y)
-    config.writeToConfig(section, "maxDistanceFromCentrum", maxDist)
-    config.writeToConfig(section, "minAreaOfContour", minArea)
-    config.writeToConfig(section, "maxDepthOfConvex", maxDefect)
+    config.write_to_config(section, "expectedCentrumX", x)
+    config.write_to_config(section, "expectedCentrumY", y)
+    config.write_to_config(section, "maxDistanceFromCentrum", maxDist)
+    config.write_to_config(section, "minAreaOfContour", minArea)
+    config.write_to_config(section, "maxDepthOfConvex", maxDefect)
+
     return redirect('/')
    
 
@@ -141,11 +142,11 @@ def index():
     section = "FiltrationVariables"
     
     #Maybe one big wierd method for collecting all data?
-    x = config.getConfigInt(section, "expectedCentrumX")
-    y = config.getConfigInt(section, "expectedCentrumY")
-    maxDist = config.getConfigInt(section, "maxDistanceFromCentrum")
-    minArea = config.getConfigInt(section, "minAreaOfContour")
-    maxDefect = config.getConfigInt(section, "maxDepthOfConvex")
+    x = config.get_config_int(section, "expectedCentrumX")
+    y = config.get_config_int(section, "expectedCentrumY")
+    maxDist = config.get_config_int(section, "maxDistanceFromCentrum")
+    minArea = config.get_config_int(section, "minAreaOfContour")
+    maxDefect = config.get_config_int(section, "maxDepthOfConvex")
     
     """ inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + "green.png")
     _, buffer = cv.imencode('.png', inputImage) """
@@ -161,4 +162,4 @@ def index():
 
 if __name__ == "__main__":
     host_ip = '10.209.173.87'
-    app.run(host=host_ip, port=5000, debug=True)
+    app.run(debug=True)

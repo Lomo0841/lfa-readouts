@@ -12,22 +12,22 @@ class DeepSearchTest(unittest.TestCase):
         self.image = np.zeros((1000, 1000, 3), dtype=np.uint8)
         cv.circle(self.image, (100, 100), 50, (255, 255, 255), -1)
 
-    def testRunAllContours(self):
+    def test_run_all_contours(self):
         #Arrange
-        deepSearch = DeepSearch(self.printer, self.image)
+        deep_search = DeepSearch(self.printer, self.image)
 
         #Act
-        allContours = deepSearch.runAllContours(0, 255, self.image)
+        all_contours = deep_search.run_all_contours(0, 255, self.image)
 
         #Assert
-        self.assertEqual(len(allContours), 255)
+        self.assertEqual(len(all_contours), 255)
 
-    def testAnalyseHistogram(self):
+    def test_analyse_histogram(self):
         #Arrange
-        deepSearch = DeepSearch(self.printer, self.image)
+        deep_search = DeepSearch(self.printer, self.image)
 
         #Act
-        min, max = deepSearch.analyseHistogram(self.image)
+        min, max = deep_search.analyse_histogram(self.image)
 
         #Assert
         self.assertEqual(min, 0)
