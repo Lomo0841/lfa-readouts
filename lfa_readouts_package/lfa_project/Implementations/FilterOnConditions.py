@@ -22,11 +22,11 @@ class FilterOnConditions(IContourFiltrator):
         areaFiltered = self.areaFilter(self.contours, minArea)
 
         touchEdgeFiltered = self.touchEdgeFilter(areaFiltered)
-
+        
         convexityDefectFiltered = self.convexityDefectFilter(touchEdgeFiltered, maxDepth)
-
+     
         centroidDistanceFiltered = self.centroidDistanceFilter(convexityDefectFiltered, expectedCentrumX, expectedCentrumY, maxDistanceFromCentrum)
-
+    
         #Do we need this?
         #pointFiltered = self.pointFilter(convexityDefectFiltered, points)
 
@@ -79,7 +79,7 @@ class FilterOnConditions(IContourFiltrator):
 
         for cnt in contours:
             hull = cv.convexHull(cnt, returnPoints=False)
-
+            
             try:
                 self.defectCheck(maxDepth, filteredContours, cnt, hull)
             except:
@@ -92,8 +92,7 @@ class FilterOnConditions(IContourFiltrator):
         defects = cv.convexityDefects(cnt, hull)
 
         if defects is not None and len(defects) > 0:
-            maxDefect = np.max(defects[:, 0, 3])
-
+            maxDefect = np.max(defects[:, 0, 3])/256
             if maxDefect <= maxDepth:
                 filteredContours.append(cnt)
         else:
@@ -112,7 +111,7 @@ class FilterOnConditions(IContourFiltrator):
             if m['m00'] != 0:
                 cx = int(m['m10']/m['m00'])
                 cy = int(m['m01']/m['m00'])
-
+               
             distance = math.sqrt((cx - expectedCentrumX)**2 + (cy - expectedCentrumY)**2)
             
             if distance <= maxDistanceFromCentrum:
