@@ -50,7 +50,6 @@ context.contourSelectorStrategy = HierarchicalSelector(printer, roi.copy(), filt
 selectedContour = context.executeContourSelectorStrategy()
 
 averagor = ColorAveragor(printer, roi.copy(), selectedContour)
-
 averagor.average_color()
 
 print("You made it to the final statement.")

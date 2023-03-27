@@ -11,7 +11,7 @@ class MaxRGB(IWhiteBalancing):
     def white_balance(self):
         normalized_img = self.normalize(self.image)
 
-        converted_img = self.convert(normalized_img)
+        converted_img = self.convert_to_8_bit(normalized_img)
 
         self.printer.write_image(converted_img, "White balanced")
 
@@ -29,7 +29,7 @@ class MaxRGB(IWhiteBalancing):
 
         return balanced_img
 
-    def convert(self, img):
+    def convert_to_8_bit(self, img):
         converted = cv.convertScaleAbs(img * 255)
 
         return converted

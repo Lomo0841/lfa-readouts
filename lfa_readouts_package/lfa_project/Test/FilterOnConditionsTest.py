@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import MagicMock
 import numpy as np
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
-from lfa_project.Utility.ConfigReader import ConfigReader
 
 class FilterOnConditionsTest(unittest.TestCase):
 
