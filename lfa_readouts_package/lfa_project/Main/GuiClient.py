@@ -23,6 +23,8 @@ class GuiClient():
         #THIS SHOULD BE OUTSOURCED TO THE TAKE PICTURE CLASS
         self.printer.write_image(self.input_image, "OriginalImage")
 
+        self.config = ConfigReader()
+
     def findRoi(self):
         self.context.roiExtractorStrategy = AprilTagsExtractor(self.printer, self.input_image)
         roi = self.context.executeRoiExtractorStrategy()
@@ -30,7 +32,6 @@ class GuiClient():
         return roi
 
     def run_algorithm_on_roi(self, roi):
-        self.config = ConfigReader()
 
         self.context.contourDetectorStrategy = BlurThresholdContourDetector(self.printer, self.config ,roi.copy())
         contours = self.context.executeContourDetectorStrategy()

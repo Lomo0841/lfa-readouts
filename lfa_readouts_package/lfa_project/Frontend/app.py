@@ -5,6 +5,7 @@ import base64
 
 from lfa_project.Utility.ConfigReader import ConfigReader
 from lfa_project.Main.GuiClient import GuiClient
+from lfa_project.Main.GuiWorkFlowClient import GuiWorkFlowClient
 
 app = Flask(__name__)
 
@@ -42,7 +43,7 @@ def cap_image():
     global isVideo, frame, client
     isVideo = False
     try:
-        client = GuiClient(frame)
+        client = GuiWorkFlowClient(frame)
         frame = client.findRoi()
         return redirect('/')
     except Exception as e:
@@ -60,7 +61,7 @@ def load_image():
 
     frame = cv.imdecode(npImage, cv.IMREAD_COLOR)
     try:
-        client = GuiClient(frame)
+        client = GuiWorkFlowClient(frame)
         frame = client.findRoi()
         return redirect('/')
     except Exception as e:
@@ -131,9 +132,6 @@ def post_data():
     config.write_to_config(section, "maxDepthOfConvex", maxDefect)
 
     return redirect('/')
-   
-
-
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -159,7 +157,6 @@ def index():
     
     return render_template('main-page.html', inputImage=b64Frame, isVideo=isVideo, x=x, y=y, maxDist=maxDist, minArea=minArea, maxDefect=maxDefect)
 
-
 if __name__ == "__main__":
     host_ip = '10.209.173.87'
-    app.run(debug=True)
+    app.run(debug=True, port = 5001)
