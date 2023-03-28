@@ -10,20 +10,20 @@ app = Flask(__name__)
 
 config = ConfigReader()
 client = None
-isVideo = True
+is_video = True
 frame = None
 
-#https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00
+# https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00
 def gen_frames():  
-    global isVideo, frame
+    global is_video, frame
     camera = cv.VideoCapture(0)
 
     while True:
         _, frame = camera.read()  # read the camera frame
-        if isVideo:
+        if is_video:
             
-            _, encodedFrame = cv.imencode('.png', frame)
-            byteFrame = encodedFrame.tobytes()
+            _, encoded_frame = cv.imencode('.png', frame)
+            byteFrame = encoded_frame.tobytes()
             yield (b'--byteFrame\r\n'
                     b'Content-Type: image/png\r\n\r\n' + byteFrame + b'\r\n')  # iterate over all bytes and concatenate
         else:
@@ -39,42 +39,42 @@ def live_image():
 
 @app.route('/cap_image') 
 def cap_image():
-    global isVideo, frame, client
-    isVideo = False
+    global is_video, frame, client
+    is_video = False
     try:
         client = GuiClient(frame)
-        frame = client.findRoi()
+        frame = client.find_roi()
         return redirect('/')
     except Exception as e:
         print(e)
         client = None
-        return redirect(url_for('error', errorMessage=e))
+        return redirect(url_for('error', error_message=e))
     
 @app.route('/load_image', methods=['POST']) 
 def load_image():
-    global isVideo, frame, client
-    isVideo = False
-    #file = request.files['file']
-    encodedImage = request.files['file'].read()
-    npImage = np.frombuffer(encodedImage, np.uint8)
+    global is_video, frame, client
+    is_video = False
+    # file = request.files['file']
+    encoded_image = request.files['file'].read()
+    np_image = np.frombuffer(encoded_image, np.uint8)
 
-    frame = cv.imdecode(npImage, cv.IMREAD_COLOR)
+    frame = cv.imdecode(np_image, cv.IMREAD_COLOR)
     try:
         client = GuiClient(frame)
-        frame = client.findRoi()
+        frame = client.find_roi()
         return redirect('/')
     except Exception as e:
         print(e)
         client = None
-        return redirect(url_for('error', errorMessage=e))
+        return redirect(url_for('error', error_message=e))
 
 
 
 
 @app.route('/run_algorithm') 
 def run_algorithm():
-    global isVideo, frame, client
-    isVideo = True
+    global is_video, frame, client
+    is_video = True
     try:
         if client is None:
             raise Exception("No valid image to analyze. Try capturing or choosing a new image")
@@ -82,35 +82,34 @@ def run_algorithm():
         client = None
         cv.drawContours(frame, result[0], -1, (0, 255, 0), 3)
 
-        return redirect(url_for('result', red=round(result[1][2],3), green=round(result[1][1],3), blue=round(result[1][0],3)))
+        return redirect(url_for('result', red=round(result[1][2], 3), green=round(result[1][1], 3), blue=round(result[1][0], 3)))
     except Exception as e:
         print(e)
         client = None
-        return redirect(url_for('error', errorMessage=e))
+        return redirect(url_for('error', error_message=e))
     
 
 @app.route('/result/<red>/<green>/<blue>') 
-def result(red,green,blue):
+def result(red, green, blue):
     global frame
     
-    b64Frame = None
+    b64_frame = None
     if frame is not None and not isinstance(frame, str):
-        _, encodedFrame = cv.imencode('.png', frame)
-        #BAD ENCODING! Maybe use tobytes aswell?
-        b64Frame = base64.b64encode(encodedFrame).decode('utf-8')
-    return render_template('result-page.html', inputImage=b64Frame, red=red, green=green, blue=blue)
-  
+        _, encoded_frame = cv.imencode('.png', frame)
+        # BAD ENCODING! Maybe use tobytes as well?
+        b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
+    return render_template('result-page.html', input_image=b64_frame, red=red, green=green, blue=blue)
 
-@app.route('/error/<errorMessage>')
-def error(errorMessage):
-    global isVideo
-    isVideo = True
-    return  render_template('error-page.html', errorMessage=errorMessage)
+@app.route('/error/<error_message>')
+def error(error_message):
+    global is_video
+    is_video = True
+    return  render_template('error-page.html', error_message=error_message)
 
 @app.route('/reset')
 def reset():
-    global isVideo
-    isVideo = True
+    global is_video
+    is_video = True
     return redirect('/')
 
 @app.route('/post_data', methods=['POST'])
@@ -120,15 +119,15 @@ def post_data():
 
     x = request.form['center_x']
     y = request.form['center_y']
-    maxDist = request.form['max_dist']
-    minArea = request.form['min_area']
-    maxDefect = request.form['max_defect']
+    max_dist = request.form['max_dist']
+    min_area = request.form['min_area']
+    max_defect = request.form['max_defect']
     
     config.write_to_config(section, "expectedCentrumX", x)
     config.write_to_config(section, "expectedCentrumY", y)
-    config.write_to_config(section, "maxDistanceFromCentrum", maxDist)
-    config.write_to_config(section, "minAreaOfContour", minArea)
-    config.write_to_config(section, "maxDepthOfConvex", maxDefect)
+    config.write_to_config(section, "maxDistanceFromCentrum", max_dist)
+    config.write_to_config(section, "minAreaOfContour", min_area)
+    config.write_to_config(section, "maxDepthOfConvex", max_defect)
 
     return redirect('/')
    
@@ -137,27 +136,27 @@ def post_data():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    global frame, isVideo
+    global frame, is_video
     
     section = "FiltrationVariables"
     
     #Maybe one big wierd method for collecting all data?
     x = config.get_config_int(section, "expectedCentrumX")
     y = config.get_config_int(section, "expectedCentrumY")
-    maxDist = config.get_config_int(section, "maxDistanceFromCentrum")
-    minArea = config.get_config_int(section, "minAreaOfContour")
-    maxDefect = config.get_config_int(section, "maxDepthOfConvex")
+    max_dist = config.get_config_int(section, "maxDistanceFromCentrum")
+    min_area = config.get_config_int(section, "minAreaOfContour")
+    max_defect = config.get_config_int(section, "maxDepthOfConvex")
     
     """ inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + "green.png")
     _, buffer = cv.imencode('.png', inputImage) """
-    b64Frame = None
+    b64_frame = None
     if frame is not None and not isinstance(frame, str):
-        _, encodedFrame = cv.imencode('.png', frame)
+        _, encoded_frame = cv.imencode('.png', frame)
         #BAD ENCODING! Maybe use tobytes aswell?
-        b64Frame = base64.b64encode(encodedFrame).decode('utf-8')
+        b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
     
     
-    return render_template('main-page.html', inputImage=b64Frame, isVideo=isVideo, x=x, y=y, maxDist=maxDist, minArea=minArea, maxDefect=maxDefect)
+    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, x=x, y=y, maxDist=max_dist, minArea=min_area, maxDefect=max_defect)
 
 
 if __name__ == "__main__":

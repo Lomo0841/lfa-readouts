@@ -11,7 +11,7 @@
     <div class="form-container">
       <div class="image-container">
         
-        {% if isVideo %}
+        {% if is_video %}
         <form id="cap_form" method="GET" action="{{ url_for('cap_image') }}"></form> 
         <form id="load_form" method="POST" action="{{ url_for('load_image') }}" enctype="multipart/form-data"></form> 
 
@@ -31,7 +31,7 @@
         {% else %}
         <form id="reset_form" action="{{ url_for('reset') }}"></form>
 
-        <img class="lfa-image" src="data:image/png;base64,{{ inputImage }}" id="lfa_image" alt="LFA image"/>
+        <img class="lfa-image" src="data:image/png;base64,{{ input_image }}" id="lfa_image" alt="LFA image"/>
         <div class="retake-button">
           <button type="submit" form="reset_form">
             <img src="{{ url_for('static', filename='assets/redo_icon.svg') }}" alt="Redo icon">
@@ -124,7 +124,7 @@
   
           document.getElementById('center_x').value = x;
           document.getElementById('center_y').value = y;
-          drawOnImage("data:image/png;base64,{{ inputImage }}", x, y);
+          drawOnImage("data:image/png;base64,{{ input_image }}", x, y);
       });
     }
 
@@ -177,7 +177,7 @@
                 // Cancel the default action, if needed
                 event.preventDefault();
                 // Trigger the button element with a click
-                drawOnImage("data:image/png;base64,{{ inputImage }}", parseInt(document.getElementById('center_x').value), parseInt(document.getElementById('center_y').value))
+                drawOnImage("data:image/png;base64,{{ input_image }}", parseInt(document.getElementById('center_x').value), parseInt(document.getElementById('center_y').value))
             }
         });
     }

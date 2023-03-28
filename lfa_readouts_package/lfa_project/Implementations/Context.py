@@ -1,78 +1,75 @@
-
 class Context():
 
-    def _init__(self):
-        #Maybe add _ before field names
-        self._roiExtractorStrategy = None 
-        self._contourDetectorStrategy = None
-        self._contourFiltratorStrategy= None
-        self._contourSelectorStrategy  = None
-        self._resultTranslatorStrategy  = None
-        self._whiteBalancingStrategy = None
+    def __init__(self):
+        self._roi_extractor_strategy = None 
+        self._contour_detector_strategy = None
+        self._contour_filtrator_strategy = None
+        self._contour_selector_strategy = None
+        self._result_translator_strategy = None
+        self._white_balancing_strategy = None
 
     @property
-    def roiExtractorStrategy(self):
-        return self._roiExtractorStrategy
+    def roi_extractor_strategy(self):
+        return self._roi_extractor_strategy
     
     @property
-    def contourDetectorStrategy(self):
-        return self._contourDetectorStrategy
+    def contour_detector_strategy(self):
+        return self._contour_detector_strategy
     
     @property
-    def contourFiltratorStrategy(self):
-        return self._contourFiltratorStrategy
+    def contour_filtrator_strategy(self):
+        return self._contour_filtrator_strategy
     
     @property
-    def contourSelectorStrategy(self):
-        return self._contourSelectorStrategy
+    def contour_selector_strategy(self):
+        return self._contour_selector_strategy
     
     @property
-    def resultTranslatorStrategy(self):
-        return self._resultTranslatorStrategy
+    def result_translator_strategy(self):
+        return self._result_translator_strategy
     
     @property
-    def whiteBalancingStrategy(self):
-        return self._whiteBalancingStrategy
+    def white_balancing_strategy(self):
+        return self._white_balancing_strategy
     
-    @roiExtractorStrategy.setter
-    def roiExtractorStrategy(self, value):
-        self._roiExtractorStrategy = value
+    @roi_extractor_strategy.setter
+    def roi_extractor_strategy(self, value):
+        self._roi_extractor_strategy = value
         
-    @contourDetectorStrategy.setter
-    def contourDetectorStrategy(self, value):
-        self._contourDetectorStrategy = value
+    @contour_detector_strategy.setter
+    def contour_detector_strategy(self, value):
+        self._contour_detector_strategy = value
     
-    @contourFiltratorStrategy.setter
-    def contourFiltratorStrategy(self, value):
-        self._contourFiltratorStrategy = value
+    @contour_filtrator_strategy.setter
+    def contour_filtrator_strategy(self, value):
+        self._contour_filtrator_strategy = value
         
-    @contourSelectorStrategy.setter
-    def contourSelectorStrategy(self, value):
-        self._contourSelectorStrategy = value
+    @contour_selector_strategy.setter
+    def contour_selector_strategy(self, value):
+        self._contour_selector_strategy = value
 
-    @resultTranslatorStrategy.setter
-    def resultTranslatorStrategy(self, value):
-        self._resultTranslatorStrategy = value
+    @result_translator_strategy.setter
+    def result_translator_strategy(self, value):
+        self._result_translator_strategy = value
 
-    @whiteBalancingStrategy.setter
-    def whiteBalancingStrategy(self, value):
-        self._whiteBalancingStrategy = value
+    @white_balancing_strategy.setter
+    def white_balancing_strategy(self, value):
+        self._white_balancing_strategy = value
 
-    def executeRoiExtractorStrategy(self):
-        return self._roiExtractorStrategy.extract_rois()
+    def execute_roi_extractor_strategy(self):
+        return self._roi_extractor_strategy.extract_rois()
     
-    def executeContourDetectorStrategy(self):
-        return self._contourDetectorStrategy.detect_contours()
+    def execute_contour_detector_strategy(self):
+        return self._contour_detector_strategy.detect_contours()
     
-    def executeContourFiltratorStrategy(self):
-        return self._contourFiltratorStrategy.filter_contours()
+    def execute_contour_filtrator_strategy(self):
+        return self._contour_filtrator_strategy.filter_contours()
 
-    def executeContourSelectorStrategy(self):
-        return self._contourSelectorStrategy.select_contour()
+    def execute_contour_selector_strategy(self):
+        return self._contour_selector_strategy.select_contour()
 
-    def executeResultTranslatorStrategy(self):
-        return self._resultTranslatorStrategy.translate_result()
+    def execute_result_translator_strategy(self):
+        return self._result_translator_strategy.translate_result()
     
-    def executeWhiteBalancingStrategy(self):
-        return self._whiteBalancingStrategy.white_balance()
-    
+    def execute_white_balancing_strategy(self):
+        return self._white_balancing_strategy.white_balance()
