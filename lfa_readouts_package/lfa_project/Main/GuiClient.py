@@ -1,4 +1,3 @@
-import cv2 as cv
 from lfa_project.Implementations.AprilTagsExtractor import AprilTagsExtractor
 from lfa_project.Implementations.BlurThresholdContourDetector import BlurThresholdContourDetector
 from lfa_project.Implementations.FilterOnConditions import FilterOnConditions
@@ -28,7 +27,6 @@ class GuiClient():
         return roi
 
     def run_algorithm_on_roi(self, roi):
-        self.config = ConfigReader()
 
         self.context.contour_detector_strategy = BlurThresholdContourDetector(self.printer, self.config ,roi.copy())
         contours = self.context.execute_contour_detector_strategy()

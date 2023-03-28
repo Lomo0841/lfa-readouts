@@ -5,6 +5,7 @@ import base64
 
 from lfa_project.Utility.ConfigReader import ConfigReader
 from lfa_project.Main.GuiClient import GuiClient
+from lfa_project.Main.GuiWorkFlowClient import GuiWorkFlowClient
 
 app = Flask(__name__)
 
@@ -130,9 +131,6 @@ def post_data():
     config.write_to_config(section, "maxDepthOfConvex", max_defect)
 
     return redirect('/')
-   
-
-
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -158,7 +156,6 @@ def index():
     
     return render_template('main-page.html', input_image=b64_frame, is_video=is_video, x=x, y=y, maxDist=max_dist, minArea=min_area, maxDefect=max_defect)
 
-
 if __name__ == "__main__":
     host_ip = '10.209.173.87'
-    app.run(debug=True)
+    app.run(debug=True, port = 5001)

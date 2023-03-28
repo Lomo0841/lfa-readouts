@@ -39,45 +39,35 @@ contour_selector_choice = config.get_config_string(section, "icontourselector")
 if roi_extractor_choice == "AprilTagsExtractor":
     context.roiExtractorStrategy = AprilTagsExtractor(printer, input_image)
     roi = context.executeRoiExtractorStrategy()
-    print("april")
 
 if white_balancer_choice == "GreyWorld":
     context.whiteBalancingStrategy = GreyWorld(printer, roi.copy())
     white_balanced = context.executeWhiteBalancingStrategy()
-    print("grey")
 elif white_balancer_choice == "MaxRGB":
      context.whiteBalancingStrategy = MaxRGB(printer, roi.copy())
      white_balanced = context.executeWhiteBalancingStrategy()
-     print("Max")
 
 if contour_detector_choice == "BlurThresholdContourDetector":
     context.contourDetectorStrategy = BlurThresholdContourDetector(printer, config, white_balanced.copy())
     contours = context.executeContourDetectorStrategy()
-    print("blurthreshold")
 elif contour_detector_choice == "AltContourDetector":
     context.contourDetectorStrategy = AltContourDetector(printer, config, white_balanced.copy())
     contours = context.executeContourDetectorStrategy()
-    print("alt")
 
 if contour_filtrator_choice == "FilterOnConditions":
     context.contourFiltratorStrategy = FilterOnConditions(printer, config, white_balanced.copy(), contours)
-    filtratedContours = context.executeContourFiltratorStrategy()
-    print("conditions")
+    filtrated_contours = context.executeContourFiltratorStrategy()
 
-if len(filtratedContours) == 0:
+if len(filtrated_contours) == 0:
     context.contourDetectorStrategy = DeepSearch(printer, white_balanced.copy())
     contours = context.executeContourDetectorStrategy()
-    print("deep")
 
     context.contourFiltratorStrategy = FilterOnConditions(printer, config, white_balanced.copy(), contours)
-    filtratedContours = context.executeContourFiltratorStrategy()
+    filtrated_contours = context.executeContourFiltratorStrategy()
 
 if contour_selector_choice == "HierarhicalSelector":
-    context.contourSelectorStrategy = HierarchicalSelector(printer, white_balanced.copy(), filtratedContours)
-    selectedContour = context.executeContourSelectorStrategy()
-    print("hierarchical")
+    context.contourSelectorStrategy = HierarchicalSelector(printer, white_balanced.copy(), filtrated_contours)
+    selected_contour = context.executeContourSelectorStrategy()
 
-averagor = ColorAveragor(printer, roi.copy(), selectedContour)
+averagor = ColorAveragor(printer, white_balanced.copy(), selected_contour)
 averagor.average_color()
-
-print("You made it to the final statement.")

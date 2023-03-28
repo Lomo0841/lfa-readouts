@@ -71,7 +71,6 @@ class FilterOnConditions(IContourFiltrator):
         return filtered_contours
 
     def convexity_defect_filter(self, contours, max_depth):
-            
         filtered_contours = []
 
         for cnt in contours:
