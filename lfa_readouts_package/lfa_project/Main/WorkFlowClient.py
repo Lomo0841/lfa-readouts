@@ -23,9 +23,9 @@ else:
 #Setting up
 context = Context()
 
-printer = Printer()
-
 config = ConfigReader()
+
+printer = Printer(config)
 
 printer.write_image(input_image, "OriginalImage")
 
