@@ -51,6 +51,8 @@ class GuiWorkFlowClient():
         elif white_balancer_choice == "MaxRGB":
             self.context.whiteBalancingStrategy = MaxRGB(self.printer, roi.copy())
             white_balanced = self.context.executeWhiteBalancingStrategy()
+        elif white_balancer_choice == "None":
+            white_balanced = roi
 
         white_end = t.time()
 

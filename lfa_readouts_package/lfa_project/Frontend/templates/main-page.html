@@ -18,7 +18,7 @@
         <img class="lfa-image" src="{{ url_for('live_image') }}" alt="LFA image" />
         <div class="button-group">
           <button type="submit" form="cap_form">
-            <img src="{{ url_for('static', filename='assets/camera_icon.svg') }}" alt="Update icon">
+            <img src="{{ url_for('static', filename='assets/camera_icon.svg') }}" alt="Camera icon">
             Capture Image
           </button>
           <!-- <button type="submit" form="load_form">Choose Image File</button> -->
@@ -47,7 +47,13 @@
       <form id="algo_form" method="GET" action="{{ url_for('run_algorithm') }}"></form> 
       
       <div class="form-group">
-        <h2>Calibrate Filters</h2>
+        <div class="header-group">
+          <h2>Calibrate Filters</h2>
+          <!-- Button to trigger modal -->
+          <button id="settings-button">
+            <img src="{{ url_for('static', filename='assets/gear_icon.svg') }}" alt="Settings icon">
+          </button>
+        </div>
         <label for="center">
           Expected Center (x,y) 
           <div id="center-help" class="help-div">?</div>
@@ -85,6 +91,83 @@
         </div>
       </div>
     
+
+
+
+      <!-- Modal container -->
+<div class="modal-container">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <h2>Advanced Settings</h2>
+
+    <div class="horizontal-flex">
+      <div class="vertical-flex">
+        <label>Roi Extractor</label>
+        <label>
+          <input type="radio" name="RoiOptions" value="AprilTagsExtractor" form="post_form">
+          AprilTags
+        </label>
+      </div>
+      <div class="vertical-flex">
+        <label>White Balancing</label>
+        <label>
+          <input type="radio" name="WhiteOptions" value="MaxRGB" form="post_form">
+          Max RGB
+        </label>
+        <label>
+          <input type="radio" name="WhiteOptions" value="GreyWorld" form="post_form">
+          Grey World
+        </label>
+        <label>
+          <input type="radio" name="WhiteOptions" value="None" form="post_form">
+          None
+        </label>
+      </div>
+      <div class="vertical-flex">
+        <label>Contour Detector</label>
+        <label>
+          <input type="radio" name="DetectorOptions" value="BlurThresholdContourDetector" form="post_form">
+          Gaussian Blur
+        </label>
+        <label>
+          <input type="radio" name="DetectorOptions" value="AltContourDetector" form="post_form">
+          Median Blur
+        </label>
+      </div>
+      <div class="vertical-flex">
+        <label>Contour Filtrator</label>
+        <label>
+          <input type="radio" name="FiltratorOptions" value="FilterOnConditions" form="post_form">
+          Use Conditions
+        </label>
+      </div>
+      <div class="vertical-flex">
+        <label>Contour Selector</label>
+        <label>
+          <input type="radio" name="SelectorOptions" value="HierarchicalSelector" form="post_form">
+          Hierarchical
+        </label>
+      </div>
+    </div>
+    <div class="horizontal-flex">
+      <div class="vertical-flex">
+        <label for="kernel_size">Kernel Size (Blur)</label>
+        <input type="number" name="kernel_size" id="kernel_size" value="{{kernelSize}}" form="post_form"/>
+      </div>
+      <div class="vertical-flex">
+        <label for="write">Save file</label>
+        <input type="checkbox" name="write" id="write" value="True" form="post_form" checked="{{write}}"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
       
     </div>
   </div>
@@ -92,11 +175,24 @@
   <script>
     //https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
 
-    /* var fileBtn = document.getElementById('file_btn');
-    fileBtn.addEventListener('click', function(event) {
-      document.getElementById('file_input').click()
-      document.getElementById('load_form').submit();
-    }); */
+        // Get modal container and button elements
+    const modalContainer = document.querySelector('.modal-container');
+    const modalBtn = document.querySelector('#settings-button');
+
+    // Add event listener to button to toggle modal display
+    modalBtn.addEventListener('click', function() {
+      modalContainer.style.display = 'block';
+    });
+
+    // Add event listener to modal container to hide modal when clicked outside of content
+    modalContainer.addEventListener('click', function(event) {
+      if (event.target === modalContainer) {
+        modalContainer.style.display = 'none';
+      }
+    });
+
+
+
     fileInput = document.getElementById('file_input')
     if (fileInput){
       fileInput.addEventListener('change', function(){
@@ -110,12 +206,18 @@
     addDrawOnEnter(document.getElementById("max_dist"))
     //DrawOnEnter Convexity Defect?
     document.getElementById("max_defect").addEventListener("keypress", function(event) {
-            // If the user presses the "Enter" key on the keyboard
-            if (event.key === "Enter") {
-                // Cancel the default action, if needed
-                event.preventDefault();            
-              }
-            });
+      if (event.key === "Enter") {
+          event.preventDefault();            
+        }
+      });
+    
+    document.getElementById("kernel_size").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+          event.preventDefault();            
+        }
+      });
+
+               
     var image = document.getElementById('lfa_image');
     if(image){
       image.addEventListener('click', function(event) {

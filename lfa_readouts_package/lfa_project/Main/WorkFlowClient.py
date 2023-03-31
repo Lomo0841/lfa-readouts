@@ -46,6 +46,8 @@ if white_balancer_choice == "GreyWorld":
 elif white_balancer_choice == "MaxRGB":
      context.whiteBalancingStrategy = MaxRGB(printer, roi.copy())
      white_balanced = context.executeWhiteBalancingStrategy()
+elif white_balancer_choice == "None":
+    white_balanced = roi
 
 if contour_detector_choice == "BlurThresholdContourDetector":
     context.contourDetectorStrategy = BlurThresholdContourDetector(printer, config, white_balanced.copy())

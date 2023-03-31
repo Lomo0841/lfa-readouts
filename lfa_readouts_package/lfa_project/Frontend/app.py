@@ -116,21 +116,36 @@ def reset():
 @app.route('/post_data', methods=['POST'])
 def post_data():
     
+    #Settings
     section = "FiltrationVariables"
 
-    x = request.form['center_x']
-    y = request.form['center_y']
-    max_dist = request.form['max_dist']
-    min_area = request.form['min_area']
-    max_defect = request.form['max_defect']
+    write_if_not_null(section, "expectedCentrumX", "center_x")
+    write_if_not_null(section, "expectedCentrumY", "center_y")
+    write_if_not_null(section, "maxDistanceFromCentrum", "max_dist")
+    write_if_not_null(section, "minAreaOfContour", "min_area")
+    write_if_not_null(section, "maxDepthOfConvex", "max_defect")
+
+    #Advanced Settings
+    section = "Implementations"
     
-    config.write_to_config(section, "expectedCentrumX", x)
-    config.write_to_config(section, "expectedCentrumY", y)
-    config.write_to_config(section, "maxDistanceFromCentrum", max_dist)
-    config.write_to_config(section, "minAreaOfContour", min_area)
-    config.write_to_config(section, "maxDepthOfConvex", max_defect)
+    write_if_not_null(section, "iRoiExtractor", "RoiOptions")
+    write_if_not_null(section, "iWhiteBalancer", "WhiteOptions")
+    write_if_not_null(section, "icontourdetector", "DetectorOptions")
+    write_if_not_null(section, "icontourfiltrator", "FiltratorOptions")
+    write_if_not_null(section, "iContourSelector", "SelectorOptions")
+
+    write_if_not_null("ContourDetection", "kernelsize", "kernel_size")
 
     return redirect('/')
+
+def write_if_not_null(section, name, options):
+    try:
+        variable = request.form[options]
+    except:
+        variable = None
+    if variable:
+        config.write_to_config(section, name, variable)
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -144,6 +159,11 @@ def index():
     max_dist = config.get_config_int(section, "maxDistanceFromCentrum")
     min_area = config.get_config_int(section, "minAreaOfContour")
     max_defect = config.get_config_int(section, "maxDepthOfConvex")
+
+    kernel_size = config.get_config_int("ContourDetection", "kernelSize")
+
+    #DOESNT WORK
+    write = config.get_config_boolean("Write", "write")
     
     """ inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + "green.png")
     _, buffer = cv.imencode('.png', inputImage) """
@@ -154,8 +174,8 @@ def index():
         b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
     
     
-    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, x=x, y=y, maxDist=max_dist, minArea=min_area, maxDefect=max_defect)
+    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, x=x, y=y, maxDist=max_dist, minArea=min_area, maxDefect=max_defect, kernelSize=kernel_size, write=write)
 
 if __name__ == "__main__":
     host_ip = '10.209.173.87'
-    app.run(debug=True, port = 5001)
+    app.run(debug=True)
