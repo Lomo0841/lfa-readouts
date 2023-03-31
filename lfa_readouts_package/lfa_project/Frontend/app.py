@@ -43,7 +43,7 @@ def cap_image():
     global is_video, frame, client
     is_video = False
     try:
-        client = GuiClient(frame)
+        client = GuiWorkFlowClient(frame)
         frame = client.find_roi()
         return redirect('/')
     except Exception as e:
@@ -61,7 +61,7 @@ def load_image():
 
     frame = cv.imdecode(np_image, cv.IMREAD_COLOR)
     try:
-        client = GuiClient(frame)
+        client = GuiWorkFlowClient(frame)
         frame = client.find_roi()
         return redirect('/')
     except Exception as e:
@@ -135,6 +135,14 @@ def post_data():
     write_if_not_null(section, "iContourSelector", "SelectorOptions")
 
     write_if_not_null("ContourDetection", "kernelsize", "kernel_size")
+    #write_if_not_null("Write", "write", "should_write")
+    try:
+        variable = request.form['should_write']
+    except:
+        variable = None
+    #print("var is: " + str(variable))
+    config.write_to_config("Write", "write", "True") if variable else config.write_to_config("Write", "write", "False")
+    
 
     return redirect('/')
 
@@ -163,7 +171,8 @@ def index():
     kernel_size = config.get_config_int("ContourDetection", "kernelSize")
 
     #DOESNT WORK
-    write = config.get_config_boolean("Write", "write")
+    should_write = config.get_config_boolean("Write", "write")
+    print(should_write)
     
     """ inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + "green.png")
     _, buffer = cv.imencode('.png', inputImage) """
@@ -174,7 +183,7 @@ def index():
         b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
     
     
-    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, x=x, y=y, maxDist=max_dist, minArea=min_area, maxDefect=max_defect, kernelSize=kernel_size, write=write)
+    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, x=x, y=y, maxDist=max_dist, minArea=min_area, maxDefect=max_defect, kernelSize=kernel_size, should_write=should_write)
 
 if __name__ == "__main__":
     host_ip = '10.209.173.87'

@@ -213,6 +213,7 @@ body {
   height: 100%;
   overflow: auto;
   background-color: rgba(0,0,0,0.4);
+
 }
 
 /* Modal content */
@@ -222,6 +223,7 @@ body {
   padding: 20px;
   border: 1px solid #888;
   width: 50%;
+  border-radius: 10px;
 }
 
 #settings-button {
@@ -250,5 +252,9 @@ body {
   width: 100% ;
   justify-content: flex-start;
   
+}
+
+.flex-align-start {
+  align-items: flex-start;
 }
  

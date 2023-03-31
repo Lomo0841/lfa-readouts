@@ -100,15 +100,15 @@
   <div class="modal-content">
     <h2>Advanced Settings</h2>
 
-    <div class="horizontal-flex">
-      <div class="vertical-flex">
+    <div class="horizontal-flex" style="padding-left: 10px;">
+      <div class="vertical-flex flex-align-start">
         <label>Roi Extractor</label>
         <label>
           <input type="radio" name="RoiOptions" value="AprilTagsExtractor" form="post_form">
           AprilTags
         </label>
       </div>
-      <div class="vertical-flex">
+      <div class="vertical-flex flex-align-start">
         <label>White Balancing</label>
         <label>
           <input type="radio" name="WhiteOptions" value="MaxRGB" form="post_form">
@@ -123,7 +123,7 @@
           None
         </label>
       </div>
-      <div class="vertical-flex">
+      <div class="vertical-flex flex-align-start">
         <label>Contour Detector</label>
         <label>
           <input type="radio" name="DetectorOptions" value="BlurThresholdContourDetector" form="post_form">
@@ -134,14 +134,14 @@
           Median Blur
         </label>
       </div>
-      <div class="vertical-flex">
+      <div class="vertical-flex flex-align-start">
         <label>Contour Filtrator</label>
         <label>
           <input type="radio" name="FiltratorOptions" value="FilterOnConditions" form="post_form">
           Use Conditions
         </label>
       </div>
-      <div class="vertical-flex">
+      <div class="vertical-flex flex-align-start">
         <label>Contour Selector</label>
         <label>
           <input type="radio" name="SelectorOptions" value="HierarchicalSelector" form="post_form">
@@ -149,14 +149,14 @@
         </label>
       </div>
     </div>
-    <div class="horizontal-flex">
+    <div class="horizontal-flex" style="margin-top: 20px;">
       <div class="vertical-flex">
         <label for="kernel_size">Kernel Size (Blur)</label>
         <input type="number" name="kernel_size" id="kernel_size" value="{{kernelSize}}" form="post_form"/>
       </div>
       <div class="vertical-flex">
-        <label for="write">Save file</label>
-        <input type="checkbox" name="write" id="write" value="True" form="post_form" checked="{{write}}"/>
+        <label for="should_write">Save file</label>
+        <input type="checkbox" name="should_write" id="should_write" value="Hej" form="post_form" {% if should_write %}checked{% endif %} />
       </div>
     </div>
   </div>
@@ -164,11 +164,6 @@
 
 
 
-
-
-
-
-      
     </div>
   </div>
 
