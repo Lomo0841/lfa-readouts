@@ -14,7 +14,8 @@ class GuiClient():
     
         # Setting up instances
         self.context = Context()
-        self.printer = Printer()
+        self.config = ConfigReader()
+        self.printer = Printer(self.config)
         self.input_image = input_image
 
         # THIS SHOULD BE OUTSOURCED TO THE TAKE PICTURE CLASS
@@ -27,19 +28,19 @@ class GuiClient():
         return roi
 
     def run_algorithm_on_roi(self, roi):
-        self.config = ConfigReader()
+        config = ConfigReader()
 
-        self.context.contour_detector_strategy = BlurThresholdContourDetector(self.printer, self.config ,roi.copy())
+        self.context.contour_detector_strategy = BlurThresholdContourDetector(self.printer, config ,roi.copy())
         contours = self.context.execute_contour_detector_strategy()
 
-        self.context.contour_filtrator_strategy = FilterOnConditions(self.printer, self.config, roi.copy(), contours)
+        self.context.contour_filtrator_strategy = FilterOnConditions(self.printer, config, roi.copy(), contours)
         filtered_contours = self.context.execute_contour_filtrator_strategy()
 
         if len(filtered_contours) == 0:
             self.context.contour_detector_strategy = DeepSearch(self.printer, roi.copy())
             contours = self.context.execute_contour_detector_strategy()
             
-            self.context.contour_filtrator_strategy = FilterOnConditions(self.printer, self.config, roi.copy(), contours)
+            self.context.contour_filtrator_strategy = FilterOnConditions(self.printer, config, roi.copy(), contours)
             filtered_contours = self.context.execute_contour_filtrator_strategy()
 
         self.context.contour_selector_strategy = HierarchicalSelector(self.printer, roi.copy(), filtered_contours)

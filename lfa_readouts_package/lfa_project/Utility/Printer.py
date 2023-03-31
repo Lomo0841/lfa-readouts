@@ -4,38 +4,41 @@ import os
 
 class Printer():
 
-    def __init__(self):
+    def __init__(self, config):
         self.folder_path = None
-        self.create_folder()
+        self.do_write = config.get_config_boolean("Write", "Write")
+        self.create_folder_and_file()
 
-    def create_folder(self):
-        now = datetime.datetime.now()
-        
-        folder_name = now.strftime('%Y-%m-%d_%H-%M-%S')
-        folder_path = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
+    def create_folder_and_file(self):
+        if self.do_write:
 
-        txt_name = now.strftime("%Y%m%d%H%M%S%f") + ".txt"
-        txt_path = os.path.join(folder_path, txt_name)
-        
-        os.makedirs(folder_path, exist_ok=True)
-        
-        self.folder_path = folder_path
-        self.txt_path = txt_path
+            now = datetime.datetime.now()
+            
+            folder_name = now.strftime('%Y-%m-%d_%H-%M-%S')
+            folder_path = os.path.join(os.getcwd(), "lfa_readouts_package", "lfa_project", "Results", folder_name)
+
+            txt_name = now.strftime("%Y%m%d%H%M%S%f") + ".txt"
+            txt_path = os.path.join(folder_path, txt_name)
+            
+            os.makedirs(folder_path, exist_ok=True)
+            
+            self.folder_path = folder_path
+            self.txt_path = txt_path
 
     def write_image(self, image, name, contours = []):
-        
-        if len(contours):
-            cv.drawContours(image, contours, -1, (0, 255, 0), 3)
+        if self.do_write:
+            if len(contours):
+                cv.drawContours(image, contours, -1, (0, 255, 0), 3)
 
-        picture_name = name + ".png"
+            picture_name = name + ".png"
 
-        img_path = os.path.join(self.folder_path, picture_name)
+            img_path = os.path.join(self.folder_path, picture_name)
 
-        cv.imwrite(img_path, image)
+            cv.imwrite(img_path, image)
         
         
     def write_file(self, message):
-
-        with open(self.txt_path, "a") as f:
-            f.write(message + "\n \n")
+        if self.do_write:
+            with open(self.txt_path, "a") as f:
+                f.write(message + "\n \n")
     

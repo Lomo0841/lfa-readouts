@@ -17,13 +17,14 @@ class GuiWorkFlowClient():
     def __init__(self, input_image):
         self.context = Context()
 
-        self.printer = Printer()
+        self.config = ConfigReader()
+
+        self.printer = Printer(self.config)
 
         self.input_image = input_image
 
         self.printer.write_image(self.input_image, "OriginalImage")
 
-        self.config = ConfigReader()
 
     def findRoi(self):
 
@@ -65,6 +66,8 @@ class GuiWorkFlowClient():
         return white_balanced
 
     def run_algorithm_on_roi(self, roi):
+        config = ConfigReader()
+
         total_start = t.time()
 
         section = "Implementations"
@@ -75,10 +78,10 @@ class GuiWorkFlowClient():
         contour_detect_start = t.time()
 
         if contour_detector_choice == "BlurThresholdContourDetector":
-            self.context.contourDetectorStrategy = BlurThresholdContourDetector(self.printer, self.config, roi.copy())
+            self.context.contourDetectorStrategy = BlurThresholdContourDetector(self.printer, config, roi.copy())
             contours = self.context.executeContourDetectorStrategy()
         elif contour_detector_choice == "AltContourDetector":
-            self.context.contourDetectorStrategy = AltContourDetector(self.printer, self.config, roi.copy())
+            self.context.contourDetectorStrategy = AltContourDetector(self.printer, config, roi.copy())
             contours = self.context.executeContourDetectorStrategy()
         
         contour_detect_end = t.time()
@@ -88,7 +91,7 @@ class GuiWorkFlowClient():
         contour_filtrate_start = t.time()
 
         if contour_filtrator_choice == "FilterOnConditions":
-            self.context.contourFiltratorStrategy = FilterOnConditions(self.printer, self.config, roi.copy(), contours)
+            self.context.contourFiltratorStrategy = FilterOnConditions(self.printer, config, roi.copy(), contours)
             filtrated_contours = self.context.executeContourFiltratorStrategy()
 
         contour_filtrate_end = t.time()
@@ -108,7 +111,7 @@ class GuiWorkFlowClient():
 
             contour_filtrate_start = t.time()
             
-            self.context.contourFiltratorStrategy = FilterOnConditions(self.printer, self.config, roi.copy(), contours)
+            self.context.contourFiltratorStrategy = FilterOnConditions(self.printer, config, roi.copy(), contours)
             filtrated_contours = self.context.executeContourFiltratorStrategy()
 
             contour_filtrate_end = t.time()
