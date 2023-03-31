@@ -75,7 +75,7 @@ class FilterOnConditions(IContourFiltrator):
 
         for cnt in contours:
             hull = cv.convexHull(cnt, returnPoints=False)
-
+            
             try:
                 self.defect_check(max_depth, filtered_contours, cnt, hull)
             except:
@@ -88,7 +88,7 @@ class FilterOnConditions(IContourFiltrator):
         defects = cv.convexityDefects(cnt, hull)
 
         if defects is not None and len(defects) > 0:
-            max_defect = np.max(defects[:, 0, 3])
+            max_defect = np.max(defects[:, 0, 3])/256
 
             if max_defect <= max_depth:
                 filtered_contours.append(cnt)
