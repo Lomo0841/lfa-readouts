@@ -60,25 +60,25 @@
         </label>
         
         <div class="input-group-x-y">
-          <input type="number" name="center_x" id="center_x" value="{{x}}" form="post_form"/>
-          <input type="number" name="center_y" id="center_y" value="{{y}}" form="post_form"/>
+          <input type="number" name="center_x" id="center_x" value="{{settings_variables.x}}" form="post_form"/>
+          <input type="number" name="center_y" id="center_y" value="{{settings_variables.y}}" form="post_form"/>
         </div>
         
         <label for="max_dist">
           Maximum Expected Center Distance 
           <div id="dist-help" class="help-div">?</div>
         </label>
-        <input type="number" name="max_dist" id="max_dist" value="{{maxDist}}" form="post_form"/>
+        <input type="number" name="max_dist" id="max_dist" value="{{settings_variables.maxDist}}" form="post_form"/>
         <label for="min_area">
           Minimum Area
           <div id="area-help" class="help-div">?</div>
         </label>
-        <input type="number" name="min_area" id="min_area" value="{{minArea}}" form="post_form"/>
+        <input type="number" name="min_area" id="min_area" value="{{settings_variables.minArea}}" form="post_form"/>
         <label for="max_defect">
           Maximum Convexity Defect
           <div id="defect-help" class="help-div">?</div>
         </label>
-        <input type="number" name="max_defect" id="max_defect" value="{{maxDefect}}" form="post_form"/>
+        <input type="number" name="max_defect" id="max_defect" value="{{settings_variables.maxDefect}}" form="post_form"/>
         <div class="button-group">
           <button type="submit" form="post_form">
             <img src="{{ url_for('static', filename='assets/update_icon.svg') }}" alt="Update icon">
@@ -104,47 +104,55 @@
       <div class="vertical-flex flex-align-start">
         <label>Roi Extractor</label>
         <label>
-          <input type="radio" name="RoiOptions" value="AprilTagsExtractor" form="post_form">
+          <input type="radio" name="RoiOptions" value="AprilTagsExtractor" form="post_form" 
+          {% if settings_variables.roi_extractor == "AprilTagsExtractor" %}checked{% endif %}>
           AprilTags
         </label>
       </div>
       <div class="vertical-flex flex-align-start">
         <label>White Balancing</label>
         <label>
-          <input type="radio" name="WhiteOptions" value="MaxRGB" form="post_form">
+          <input type="radio" name="WhiteOptions" value="MaxRGB" form="post_form" 
+          {% if settings_variables.white_balancer == "MaxRGB" %}checked{% endif %}>
           Max RGB
         </label>
         <label>
-          <input type="radio" name="WhiteOptions" value="GreyWorld" form="post_form">
+          <input type="radio" name="WhiteOptions" value="GreyWorld" form="post_form" 
+          {% if settings_variables.white_balancer == "GreyWorld" %}checked{% endif %}>
           Grey World
         </label>
         <label>
-          <input type="radio" name="WhiteOptions" value="None" form="post_form">
+          <input type="radio" name="WhiteOptions" value="None" form="post_form" 
+          {% if settings_variables.white_balancer == "None" %}checked{% endif %}>
           None
         </label>
       </div>
       <div class="vertical-flex flex-align-start">
         <label>Contour Detector</label>
         <label>
-          <input type="radio" name="DetectorOptions" value="BlurThresholdContourDetector" form="post_form">
+          <input type="radio" name="DetectorOptions" value="BlurThresholdContourDetector" form="post_form" 
+          {% if settings_variables.contour_detector == "BlurThresholdContourDetector" %}checked{% endif %}>
           Gaussian Blur
         </label>
         <label>
-          <input type="radio" name="DetectorOptions" value="AltContourDetector" form="post_form">
+          <input type="radio" name="DetectorOptions" value="AltContourDetector" form="post_form" 
+          {% if settings_variables.contour_detector == "AltContourDetector" %}checked{% endif %}>
           Median Blur
         </label>
       </div>
       <div class="vertical-flex flex-align-start">
         <label>Contour Filtrator</label>
         <label>
-          <input type="radio" name="FiltratorOptions" value="FilterOnConditions" form="post_form">
+          <input type="radio" name="FiltratorOptions" value="FilterOnConditions" form="post_form" 
+          {% if settings_variables.contour_filtrator == "FilterOnConditions" %}checked{% endif %}>
           Use Conditions
         </label>
       </div>
       <div class="vertical-flex flex-align-start">
         <label>Contour Selector</label>
         <label>
-          <input type="radio" name="SelectorOptions" value="HierarchicalSelector" form="post_form">
+          <input type="radio" name="SelectorOptions" value="HierarchicalSelector" form="post_form" 
+          {% if settings_variables.contour_selector == "HierarchicalSelector" %}checked{% endif %}>
           Hierarchical
         </label>
       </div>
@@ -152,11 +160,12 @@
     <div class="horizontal-flex" style="margin-top: 20px;">
       <div class="vertical-flex">
         <label for="kernel_size">Kernel Size (Blur)</label>
-        <input type="number" name="kernel_size" id="kernel_size" value="{{kernelSize}}" form="post_form"/>
+        <input type="number" name="kernel_size" id="kernel_size" value="{{settings_variables.kernelSize}}" form="post_form"/>
       </div>
       <div class="vertical-flex">
         <label for="should_write">Save file</label>
-        <input type="checkbox" name="should_write" id="should_write" value="Hej" form="post_form" {% if should_write %}checked{% endif %} />
+        <input type="checkbox" name="should_write" id="should_write" value="Hej" form="post_form" 
+        {% if settings_variables.should_write %}checked{% endif %} />
       </div>
     </div>
   </div>

@@ -69,7 +69,7 @@ class AprilTagsExtractor(IRoiExtractor):
 
         de_warped_image = cv.warpPerspective(original_image, transform,(max_width, max_height),flags=cv.INTER_LINEAR)
 
-        return de_warped_image
+        return de_warped_image[:, 5:-5]
 
 
     def crop_roi(image, x, y, h, w):

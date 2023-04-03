@@ -160,7 +160,6 @@ def index():
     global frame, is_video
     
     section = "FiltrationVariables"
-    
     #Maybe one big wierd method for collecting all data?
     x = config.get_config_int(section, "expectedCentrumX")
     y = config.get_config_int(section, "expectedCentrumY")
@@ -168,11 +167,17 @@ def index():
     min_area = config.get_config_int(section, "minAreaOfContour")
     max_defect = config.get_config_int(section, "maxDepthOfConvex")
 
-    kernel_size = config.get_config_int("ContourDetection", "kernelSize")
+    section = "Implementations"
+    roi_extractor = config.get_config_string(section, "iroiextractor")
+    white_balancer = config.get_config_string(section, "iwhitebalancer")
+    contour_detector = config.get_config_string(section, "icontourdetector")
+    contour_filtrator = config.get_config_string(section, "icontourfiltrator")
+    contour_selector = config.get_config_string(section, "icontourselector")
 
-    #DOESNT WORK
+
+    kernel_size = config.get_config_int("ContourDetection", "kernelSize")
     should_write = config.get_config_boolean("Write", "write")
-    print(should_write)
+
     
     """ inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + "green.png")
     _, buffer = cv.imencode('.png', inputImage) """
@@ -181,9 +186,14 @@ def index():
         _, encoded_frame = cv.imencode('.png', frame)
         #BAD ENCODING! Maybe use tobytes aswell?
         b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
+
+
+    settings_variables = {'x': x, 'y': y, 'maxDist': max_dist, 'minArea': min_area,
+           'maxDefect': max_defect, 'kernelSize': kernel_size, 'should_write': should_write, 'roi_extractor': roi_extractor,
+           'white_balancer': white_balancer, 'contour_detector': contour_detector, 'contour_filtrator': contour_filtrator,
+           'contour_selector': contour_selector}
     
-    
-    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, x=x, y=y, maxDist=max_dist, minArea=min_area, maxDefect=max_defect, kernelSize=kernel_size, should_write=should_write)
+    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, settings_variables=settings_variables)
 
 if __name__ == "__main__":
     host_ip = '10.209.173.87'
