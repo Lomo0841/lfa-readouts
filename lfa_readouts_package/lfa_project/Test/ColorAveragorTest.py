@@ -15,9 +15,6 @@ class ColorAveragorTest(unittest.TestCase):
 
     def test_color_averagor_green(self):
         #Arrange
-        mask = np.zeros(self.image.shape[:2], np.uint8)
-        cv.drawContours(mask, [self.contour], 0, 255, -1)
-        self.image[mask == 255] = (0, 255, 0)
         color_averagor = ColorAveragor(self.printer, self.image, self.contour)
         
         #Act
@@ -25,6 +22,10 @@ class ColorAveragorTest(unittest.TestCase):
         
         #Assert
         self.assertAlmostEqual(average, (0.0, 255.0 ,0.0 ,0.0))
+
+        #cv.waitKey(0)
+
+        #cv.destroyAllWindows()
 
 if __name__ == '__main__':
     unittest.main()

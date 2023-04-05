@@ -12,7 +12,7 @@ class HierarchicalSelectorTest(unittest.TestCase):
         self.contours = []
         self.printer = MagicMock()
 
-    def test_select_contourn_no_contours(self):
+    def test_select_contour_no_contours(self):
         #Arrange
         selector = HierarchicalSelector(self.printer, self.image, self.contours)
 
@@ -48,9 +48,6 @@ class HierarchicalSelectorTest(unittest.TestCase):
         #Assert
         self.assertIsNotNone(outermost_contour)
         self.assertEqual(outermost_contour.tolist(), self.contours[0].tolist())
-
-
-
 
 if __name__ == '__main__':
     unittest.main()
