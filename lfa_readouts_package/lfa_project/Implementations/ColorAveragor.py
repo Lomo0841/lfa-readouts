@@ -4,19 +4,19 @@ import numpy as np
 class ColorAveragor():
 
     def __init__(self, printer, image, contour):
-        self.printer = printer
-        self.image = image
-        self.contour = contour
+        self._printer = printer
+        self._image = image
+        self._contour = contour
 
     def average_color(self):
-        mask = np.zeros(self.image.shape[:2], np.uint8)
+        mask = np.zeros(self._image.shape[:2], np.uint8)
 
-        cv.drawContours(mask, [self.contour], 0, 255, -1)
+        cv.drawContours(mask, [self._contour], 0, 255, -1)
 
-        masked_image = cv.bitwise_and(self.image, self.image, mask=mask)
+        masked_image = cv.bitwise_and(self._image, self._image, mask=mask)
 
         avg_color = cv.mean(masked_image, mask=mask)
 
-        self.printer.write_file("RGB:" + str(avg_color))
+        self._printer.write_file("RGB:" + str(avg_color))
 
         return avg_color

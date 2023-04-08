@@ -9,7 +9,7 @@ from lfa_project.Main.GuiWorkFlowClient import GuiWorkFlowClient
 
 app = Flask(__name__)
 
-config = ConfigReader()
+_config = ConfigReader()
 client = None
 is_video = True
 frame = None
@@ -141,7 +141,7 @@ def post_data():
     except:
         variable = None
     #print("var is: " + str(variable))
-    config.write_to_config("Write", "write", "True") if variable else config.write_to_config("Write", "write", "False")
+    _config.write_to_config("Write", "write", "True") if variable else _config.write_to_config("Write", "write", "False")
     
 
     return redirect('/')
@@ -152,7 +152,7 @@ def write_if_not_null(section, name, options):
     except:
         variable = None
     if variable:
-        config.write_to_config(section, name, variable)
+        _config.write_to_config(section, name, variable)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -162,16 +162,16 @@ def index():
     section = "FiltrationVariables"
     
     #Maybe one big wierd method for collecting all data?
-    x = config.get_config_int(section, "expectedCentrumX")
-    y = config.get_config_int(section, "expectedCentrumY")
-    max_dist = config.get_config_int(section, "maxDistanceFromCentrum")
-    min_area = config.get_config_int(section, "minAreaOfContour")
-    max_defect = config.get_config_int(section, "maxDepthOfConvex")
+    x = _config.get_config_int(section, "expectedCentrumX")
+    y = _config.get_config_int(section, "expectedCentrumY")
+    max_dist = _config.get_config_int(section, "maxDistanceFromCentrum")
+    min_area = _config.get_config_int(section, "minAreaOfContour")
+    max_defect = _config.get_config_int(section, "maxDepthOfConvex")
 
-    kernel_size = config.get_config_int("ContourDetection", "kernelSize")
+    kernel_size = _config.get_config_int("ContourDetection", "kernelSize")
 
     #DOESNT WORK
-    should_write = config.get_config_boolean("Write", "write")
+    should_write = _config.get_config_boolean("Write", "write")
     print(should_write)
     
     """ inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + "green.png")

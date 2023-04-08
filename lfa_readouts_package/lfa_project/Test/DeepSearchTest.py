@@ -17,7 +17,7 @@ class DeepSearchTest(unittest.TestCase):
         deep_search = DeepSearch(self.printer, self.image)
 
         #Act
-        all_contours = deep_search.run_all_contours(0, 255, self.image)
+        all_contours = deep_search._run_all_contours(0, 255, self.image)
 
         #Assert
         self.assertEqual(len(all_contours), 255)
@@ -27,7 +27,7 @@ class DeepSearchTest(unittest.TestCase):
         deep_search = DeepSearch(self.printer, self.image)
 
         #Act
-        min, max = deep_search.analyse_histogram(self.image)
+        min, max = deep_search._analyse_histogram(self.image)
 
         #Assert
         self.assertEqual(min, 0)

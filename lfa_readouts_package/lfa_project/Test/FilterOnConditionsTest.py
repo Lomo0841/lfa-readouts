@@ -21,7 +21,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
 
         #Act
-        area_filtered = filtrator.area_filter(contours, 50)
+        area_filtered = filtrator._area_filter(contours, 50)
         area_filtered_list = [contour.tolist() for contour in area_filtered]
 
         #Assert
@@ -36,7 +36,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
 
         #Act
-        area_filtered = filtrator.area_filter(contours, 50)
+        area_filtered = filtrator._area_filter(contours, 50)
         area_filtered_list = [contour.tolist() for contour in area_filtered]
 
         #Assert
@@ -52,7 +52,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         
         #Act
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
-        convexity_defect_filtered = filtrator.convexity_defect_filter(contours, max_depth)
+        convexity_defect_filtered = filtrator._convexity_defect_filter(contours, max_depth)
         convexity_defect_filtered_list = [contour.tolist() for contour in convexity_defect_filtered]
 
         #Assert
@@ -66,7 +66,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         
         #Act
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
-        convexity_defect_filtered = filtrator.convexity_defect_filter(contours, max_depth)
+        convexity_defect_filtered = filtrator._convexity_defect_filter(contours, max_depth)
         convexity_defect_filtered_list = [contour.tolist() for contour in convexity_defect_filtered]
 
         #Assert
@@ -85,7 +85,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
         
         # Act
-        centroid_distance_filtered = filtrator.centroid_distance_filter(contours, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
+        centroid_distance_filtered = filtrator._centroid_distance_filter(contours, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
         centroid_distance_filtered_list  = [contour.tolist() for contour in centroid_distance_filtered ]
         
         # Assert
@@ -103,7 +103,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
         
         # Act
-        centroid_distance_filtered = filtrator.centroid_distance_filter(contours, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
+        centroid_distance_filtered = filtrator._centroid_distance_filter(contours, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
         centroid_distance_filtered_list  = [contour.tolist() for contour in centroid_distance_filtered ]
         
         # Assert
@@ -122,7 +122,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
         
         # Act
-        centroid_distance_filtered = filtrator.centroid_distance_filter(contours, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
+        centroid_distance_filtered = filtrator._centroid_distance_filter(contours, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
         centroid_distance_filtered_list  = [contour.tolist() for contour in centroid_distance_filtered ]
         
         # Assert
@@ -136,7 +136,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
 
         #Act
-        touch_edge_filtered = filtrator.touch_edge_filter(contours)
+        touch_edge_filtered = filtrator._touch_edge_filter(contours)
         touch_edge_filtered_list = [contour.tolist() for contour in touch_edge_filtered]
 
         #Assert
@@ -150,7 +150,7 @@ class FilterOnConditionsTest(unittest.TestCase):
         filtrator = FilterOnConditions(self.printer, self.config, self.image, contours)
 
         #Act
-        touch_edge_filtered = filtrator.touch_edge_filter(contours)
+        touch_edge_filtered = filtrator._touch_edge_filter(contours)
         touch_edge_filtered_list = [contour.tolist() for contour in touch_edge_filtered]
 
         #Assert

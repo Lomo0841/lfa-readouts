@@ -7,8 +7,8 @@ class AprilTagsExtractor(IRoiExtractor):
 
     #maybe config
     def __init__(self, printer, image):
-        self.printer = printer
-        self.image = image
+        self._printer = printer
+        self._image = image
         #self.config = config
 
 
@@ -19,25 +19,25 @@ class AprilTagsExtractor(IRoiExtractor):
         #h = self.config.get_config_int(section, "h")
         #w = self.config.get_config_int(section, "w")
 
-        image_grey_scale = self.grey_scale(self.image) 
+        image_grey_scale = self._grey_scale(self._image) 
         
-        de_warped = self.de_warp(self.image, image_grey_scale)
+        de_warped = self._de_warp(self._image, image_grey_scale)
         
         #cropped = self.crop_roi(de_warped, x, y, h, w)
 
-        self.printer.write_image(de_warped, "Roi")
+        self._printer.write_image(de_warped, "Roi")
 
         return de_warped
     
-    def grey_scale(self, image):
+    def _grey_scale(self, image):
         
         grey_scale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
         return grey_scale
     
-    def de_warp(self, original_image, grey_scale):
+    def _de_warp(self, original_image, grey_scale):
 
-        detections = self.detect_april_tags(grey_scale)
+        detections = self._detect_april_tags(grey_scale)
         
         if len(detections) < 4:
             raise Exception("Could not find all 4 AprilTags")
@@ -72,12 +72,12 @@ class AprilTagsExtractor(IRoiExtractor):
         return de_warped_image
 
 
-    def crop_roi(image, x, y, h, w):
+    def _crop_roi(image, x, y, h, w):
 
         return image[y:y+h, x:x+w]
 
     
-    def detect_april_tags(self, grey_scale):
+    def _detect_april_tags(self, grey_scale):
 
         detector = apriltag.Detector("tag36h11")
 
