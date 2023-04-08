@@ -1,0 +1,33 @@
+<!-- Modal container -->
+<div class="modal-container">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <h2>Advanced Settings</h2>
+
+      <div class="horizontal-flex" style="padding-left: 10px;">
+        {% for implementation in implementations %}
+        <div class="vertical-flex flex-align-start">
+          <label>{{implementation.step}}</label>
+          {% for option in implementation.options %}
+          <label>
+            <input type="radio" name="{{implementation.group}}" value="{{option.value}}" form="post_form" 
+            {% if implementation.checked == option.value %}checked{% endif %}>
+            {{option.name}}
+          </label>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="horizontal-flex" style="margin-top: 20px;">
+        <div class="vertical-flex">
+          <label for="kernel_size">Kernel Size (Blur)</label>
+          <input type="number" name="kernel_size" id="kernel_size" value="{{settings_variables.kernelSize}}" form="post_form"/>
+        </div>
+        <div class="vertical-flex">
+          <label for="should_print">Save file</label>
+          <input type="checkbox" name="should_print" id="should_print" form="post_form" 
+          {% if settings_variables.should_print %}checked{% endif %} />
+        </div>
+      </div>
+    </div>
+  </div>
