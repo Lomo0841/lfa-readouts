@@ -6,11 +6,11 @@ class Printer():
 
     def __init__(self, config):
         self.folder_path = None
-        self.do_write = config.get_config_boolean("Write", "Write")
+        self.do_print = config.get_config_boolean("Print", "print")
         self.create_folder_and_file()
 
     def create_folder_and_file(self):
-        if self.do_write:
+        if self.do_print:
 
             now = datetime.datetime.now()
             
@@ -26,7 +26,7 @@ class Printer():
             self.txt_path = txt_path
 
     def write_image(self, image, name, contours = []):
-        if self.do_write:
+        if self.do_print:
             if len(contours):
                 cv.drawContours(image, contours, -1, (0, 255, 0), 3)
 
@@ -38,7 +38,7 @@ class Printer():
         
         
     def write_file(self, message):
-        if self.do_write:
+        if self.do_print:
             with open(self.txt_path, "a") as f:
                 f.write(message + "\n \n")
     
