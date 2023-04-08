@@ -20,28 +20,28 @@ height, width = inputImage.shape[:2]
 #Setting up instances
 context = Context()
 
-printer = Printing()
+_printer = Printing()
 
 start = t.time()
 #THIS SHOULD BE OUTSOURCED TO THE TAKE PICTURE CLASS
-printer.write_image(inputImage, "OriginalImage")
+_printer.write_image(inputImage, "OriginalImage")
 
-context.roiExtractorStrategy = AprilTagsExtractor(printer, inputImage)
+context.roiExtractorStrategy = AprilTagsExtractor(_printer, inputImage)
 roi = context.executeRoiExtractorStrategy()
 
-context.contourDetectorStrategy = BlurThresholdContourDetector(printer, roi.copy())
-contours = context.executeContourDetectorStrategy()
+context.contourDetectorStrategy = BlurThresholdContourDetector(_printer, roi.copy())
+_contours = context.executeContourDetectorStrategy()
 
 #context.contourFiltratorStrategy = FilterOnConditions(printer, contours)
 #filtratedContours = context.executeContourFiltratorStrategy()
 
-filtrator = FilterOnConditions(printer, roi.copy(), contours)
-filtratedContours = filtrator.touch_edge_filter(contours, height, width)
+filtrator = FilterOnConditions(_printer, roi.copy(), _contours)
+filtratedContours = filtrator._touch_edge_filter(_contours, height, width)
 
-context.contourSelectorStrategy = HierarchicalSelector(printer, roi.copy(), filtratedContours)
+context.contourSelectorStrategy = HierarchicalSelector(_printer, roi.copy(), filtratedContours)
 selectedContour = context.executeContourSelectorStrategy()
 
-averagor = ColorAveragor(printer, roi.copy(), selectedContour)
+averagor = ColorAveragor(_printer, roi.copy(), selectedContour)
 averagor.average_color()
 
 print(t.time()-start)

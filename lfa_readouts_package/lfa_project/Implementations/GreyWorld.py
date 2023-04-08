@@ -4,17 +4,17 @@ import cv2 as cv
 class GreyWorld(IWhiteBalancing):
 
     def __init__(self, printer, image):
-        self.printer = printer
-        self.image = image
+        self._printer = printer
+        self._image = image
 
     def white_balance(self):
-        balanced = self.normalize(self.image)
+        balanced = self._normalize(self._image)
 
-        self.printer.write_image(balanced, "White balanced")
+        self._printer.write_image(balanced, "White balanced")
 
         return balanced
 
-    def normalize(self, img):
+    def _normalize(self, img):
         lab_img = cv.cvtColor(img, cv.COLOR_BGR2LAB)
 
         l_mean, a_mean, b_mean, _ = cv.mean(lab_img)

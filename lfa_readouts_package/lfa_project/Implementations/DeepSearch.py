@@ -6,18 +6,18 @@ from lfa_project.Interfaces.IContourDetector import IContourDetector
 class DeepSearch(IContourDetector):
 
     def __init__(self, printer, image):
-        self.printer = printer
-        self.image = image
+        self._printer = printer
+        self._image = image
 
     def detect_contours(self):
-        min, max = self.analyse_histogram(self.image)
+        min, max = self._analyse_histogram(self._image)
 
-        all_contours = self.run_all_contours(min, max, self.image)
+        all_contours = self._run_all_contours(min, max, self._image)
 
         return all_contours
 
-    def analyse_histogram(self, image):
-        gray_scale = self.grey_scale(image)
+    def _analyse_histogram(self, image):
+        gray_scale = self._grey_scale(image)
 
         histogram = cv.calcHist([gray_scale], [0], None, [256], [0, 256])
 
@@ -29,13 +29,13 @@ class DeepSearch(IContourDetector):
 
         return min_index, max_index
 
-    def run_all_contours(self, min, max, image):
+    def _run_all_contours(self, min, max, image):
 
         all_contours= []
 
         blur = cv.GaussianBlur(image, (5, 5), 0)
 
-        grey_scale = self.grey_scale(blur)
+        grey_scale = self._grey_scale(blur)
 
         for i in range(min, max):
             _, thresholded_image = cv.threshold(grey_scale, i, 255, cv.THRESH_BINARY)
@@ -49,7 +49,7 @@ class DeepSearch(IContourDetector):
 
         return flat_contours
 
-    def grey_scale(self, image):
+    def _grey_scale(self, image):
         
         grey_scale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 

@@ -37,39 +37,39 @@ contour_filtrator_choice = config.get_config_string(section, "icontourfiltrator"
 contour_selector_choice = config.get_config_string(section, "icontourselector")
 
 if roi_extractor_choice == "AprilTagsExtractor":
-    context.roiExtractorStrategy = AprilTagsExtractor(printer, input_image)
-    roi = context.executeRoiExtractorStrategy()
+    context.roi_extractor_strategy = AprilTagsExtractor(printer, input_image)
+    roi = context.execute_roi_extractor_strategy()
 
 if white_balancer_choice == "GreyWorld":
-    context.whiteBalancingStrategy = GreyWorld(printer, roi.copy())
-    white_balanced = context.executeWhiteBalancingStrategy()
+    context.white_balancing_strategy = GreyWorld(printer, roi.copy())
+    white_balanced = context.execute_white_balancing_strategy()
 elif white_balancer_choice == "MaxRGB":
-     context.whiteBalancingStrategy = MaxRGB(printer, roi.copy())
-     white_balanced = context.executeWhiteBalancingStrategy()
+     context.white_balancing_strategy = MaxRGB(printer, roi.copy())
+     white_balanced = context.execute_white_balancing_strategy()
 elif white_balancer_choice == "None":
     white_balanced = roi
 
 if contour_detector_choice == "BlurThresholdContourDetector":
-    context.contourDetectorStrategy = BlurThresholdContourDetector(printer, config, white_balanced.copy())
-    contours = context.executeContourDetectorStrategy()
+    context.contour_detector_strategy = BlurThresholdContourDetector(printer, config, white_balanced.copy())
+    _contours = context.execute_contour_detector_strategy()
 elif contour_detector_choice == "AltContourDetector":
-    context.contourDetectorStrategy = AltContourDetector(printer, config, white_balanced.copy())
-    contours = context.executeContourDetectorStrategy()
+    context.contour_detector_strategy = AltContourDetector(printer, config, white_balanced.copy())
+    _contours = context.execute_contour_detector_strategy()
 
 if contour_filtrator_choice == "FilterOnConditions":
-    context.contourFiltratorStrategy = FilterOnConditions(printer, config, white_balanced.copy(), contours)
-    filtrated_contours = context.executeContourFiltratorStrategy()
+    context.contour_filtrator_strategy = FilterOnConditions(printer, config, white_balanced.copy(), _contours)
+    filtrated_contours = context.execute_contour_filtrator_strategy()
 
 if len(filtrated_contours) == 0:
-    context.contourDetectorStrategy = DeepSearch(printer, white_balanced.copy())
-    contours = context.executeContourDetectorStrategy()
+    context.contour_detector_strategy = DeepSearch(printer, white_balanced.copy())
+    _contours = context.execute_contour_detector_strategy()
 
-    context.contourFiltratorStrategy = FilterOnConditions(printer, config, white_balanced.copy(), contours)
-    filtrated_contours = context.executeContourFiltratorStrategy()
+    context.contour_filtrator_strategy = FilterOnConditions(printer, config, white_balanced.copy(), _contours)
+    filtrated_contours = context.execute_contour_filtrator_strategy()
 
-if contour_selector_choice == "HierarhicalSelector":
-    context.contourSelectorStrategy = HierarchicalSelector(printer, white_balanced.copy(), filtrated_contours)
-    selected_contour = context.executeContourSelectorStrategy()
+if contour_selector_choice == "HierarchicalSelector":
+    context.contour_selector_strategy = HierarchicalSelector(printer, white_balanced.copy(), filtrated_contours)
+    selected_contour = context.execute_contour_selector_strategy()
 
 averagor = ColorAveragor(printer, white_balanced.copy(), selected_contour)
 averagor.average_color()
