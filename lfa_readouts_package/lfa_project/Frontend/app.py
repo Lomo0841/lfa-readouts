@@ -135,13 +135,12 @@ def post_data():
     write_if_not_null(section, "iContourSelector", "SelectorOptions")
 
     write_if_not_null("ContourDetection", "kernelsize", "kernel_size")
-    #write_if_not_null("Write", "write", "should_write")
+    #Special handling of writing to config file whether we should save results locally
     try:
-        variable = request.form['should_write']
+        variable = request.form['should_print']
     except:
         variable = None
-    #print("var is: " + str(variable))
-    _config.write_to_config("Write", "write", "True") if variable else _config.write_to_config("Write", "write", "False")
+    _config.write_to_config("Print", "print", "True") if variable else _config.write_to_config("Print", "print", "False")
     
 
     return redirect('/')
@@ -160,7 +159,6 @@ def index():
     global frame, is_video
     
     section = "FiltrationVariables"
-    #Maybe one big wierd method for collecting all data?
     x = _config.get_config_int(section, "expectedCentrumX")
     y = _config.get_config_int(section, "expectedCentrumY")
     max_dist = _config.get_config_int(section, "maxDistanceFromCentrum")
@@ -168,32 +166,61 @@ def index():
     max_defect = _config.get_config_int(section, "maxDepthOfConvex")
 
     section = "Implementations"
-    roi_extractor = config.get_config_string(section, "iroiextractor")
-    white_balancer = config.get_config_string(section, "iwhitebalancer")
-    contour_detector = config.get_config_string(section, "icontourdetector")
-    contour_filtrator = config.get_config_string(section, "icontourfiltrator")
-    contour_selector = config.get_config_string(section, "icontourselector")
+    roi_extractor = _config.get_config_string(section, "iroiextractor")
+    white_balancer = _config.get_config_string(section, "iwhitebalancer")
+    contour_detector = _config.get_config_string(section, "icontourdetector")
+    contour_filtrator = _config.get_config_string(section, "icontourfiltrator")
+    contour_selector = _config.get_config_string(section, "icontourselector")
+    print(roi_extractor)
 
+    kernel_size = _config.get_config_int("ContourDetection", "kernelSize")
+    should_print = _config.get_config_boolean("Print", "print")
 
-    kernel_size = config.get_config_int("ContourDetection", "kernelSize")
-    should_write = config.get_config_boolean("Write", "write")
-
-    
-    """ inputImage = cv.imread("lfa_readouts_package\lfa_project\Images\\" + "green.png")
-    _, buffer = cv.imencode('.png', inputImage) """
     b64_frame = None
     if frame is not None and not isinstance(frame, str):
         _, encoded_frame = cv.imencode('.png', frame)
-        #BAD ENCODING! Maybe use tobytes aswell?
         b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
 
+    implementation_options = [
+        {"step": "Roi Extractor", 
+         "group": "RoiOptions",
+         "checked": roi_extractor,
+         "options": [
+                     {"value": "AprilTagsExtractor", "name": "AprilTags"}]
+        },
+        {"step": "White Balancing", 
+         "group": "WhiteOptions", 
+         "checked": white_balancer,
+         "options": [
+                     {"value": "MaxRGB", "name": "Max RGB"}, 
+                     {"value": "GreyWorld", "name": "Grey World"}, 
+                     {"value": "None", "name": "None"}]
+        },
+        {"step": "Contour Detector", 
+         "group": "DetectorOptions", 
+         "checked": contour_detector,
+         "options": [
+                     {"value": "BlurThresholdContourDetector", "name": "Gaussian Blur"}, 
+                     {"value": "AltContourDetector", "name": "Median Blur"}]
+        },
+        {"step": "Contour Filtrator", 
+         "group": "FiltratorOptions", 
+         "checked": contour_filtrator,
+         "options": [
+                     {"value": "FilterOnConditions", "name": "Use Conditions"}]
+        },
+        {"step": "Contour Selector", 
+         "group": "SelectorOptions", 
+         "checked": contour_selector,
+         "options": [
+                     {"value": "HierarchicalSelector", "name": "Hierarchical"}]
+        }
+    ]
 
     settings_variables = {'x': x, 'y': y, 'maxDist': max_dist, 'minArea': min_area,
-           'maxDefect': max_defect, 'kernelSize': kernel_size, 'should_write': should_write, 'roi_extractor': roi_extractor,
-           'white_balancer': white_balancer, 'contour_detector': contour_detector, 'contour_filtrator': contour_filtrator,
-           'contour_selector': contour_selector}
+           'maxDefect': max_defect, 'kernelSize': kernel_size, 'should_print': should_print}
     
-    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, settings_variables=settings_variables)
+    return render_template('main-page.html', input_image=b64_frame, is_video=is_video, implementations = implementation_options, settings_variables=settings_variables)
 
 if __name__ == "__main__":
     host_ip = '10.209.173.87'

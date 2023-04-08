@@ -101,61 +101,19 @@
     <h2>Advanced Settings</h2>
 
     <div class="horizontal-flex" style="padding-left: 10px;">
+      {% for implementation in implementations %}
       <div class="vertical-flex flex-align-start">
-        <label>Roi Extractor</label>
+        <label>{{implementation.step}}</label>
+        {% for option in implementation.options %}
         <label>
-          <input type="radio" name="RoiOptions" value="AprilTagsExtractor" form="post_form" 
-          {% if settings_variables.roi_extractor == "AprilTagsExtractor" %}checked{% endif %}>
-          AprilTags
+          <input type="radio" name="{{implementation.group}}" value="{{option.value}}" form="post_form" 
+          {% if implementation.checked == option.value %}checked{% endif %}>
+          {{option.name}}
+          
         </label>
+        {% endfor %}
       </div>
-      <div class="vertical-flex flex-align-start">
-        <label>White Balancing</label>
-        <label>
-          <input type="radio" name="WhiteOptions" value="MaxRGB" form="post_form" 
-          {% if settings_variables.white_balancer == "MaxRGB" %}checked{% endif %}>
-          Max RGB
-        </label>
-        <label>
-          <input type="radio" name="WhiteOptions" value="GreyWorld" form="post_form" 
-          {% if settings_variables.white_balancer == "GreyWorld" %}checked{% endif %}>
-          Grey World
-        </label>
-        <label>
-          <input type="radio" name="WhiteOptions" value="None" form="post_form" 
-          {% if settings_variables.white_balancer == "None" %}checked{% endif %}>
-          None
-        </label>
-      </div>
-      <div class="vertical-flex flex-align-start">
-        <label>Contour Detector</label>
-        <label>
-          <input type="radio" name="DetectorOptions" value="BlurThresholdContourDetector" form="post_form" 
-          {% if settings_variables.contour_detector == "BlurThresholdContourDetector" %}checked{% endif %}>
-          Gaussian Blur
-        </label>
-        <label>
-          <input type="radio" name="DetectorOptions" value="AltContourDetector" form="post_form" 
-          {% if settings_variables.contour_detector == "AltContourDetector" %}checked{% endif %}>
-          Median Blur
-        </label>
-      </div>
-      <div class="vertical-flex flex-align-start">
-        <label>Contour Filtrator</label>
-        <label>
-          <input type="radio" name="FiltratorOptions" value="FilterOnConditions" form="post_form" 
-          {% if settings_variables.contour_filtrator == "FilterOnConditions" %}checked{% endif %}>
-          Use Conditions
-        </label>
-      </div>
-      <div class="vertical-flex flex-align-start">
-        <label>Contour Selector</label>
-        <label>
-          <input type="radio" name="SelectorOptions" value="HierarchicalSelector" form="post_form" 
-          {% if settings_variables.contour_selector == "HierarchicalSelector" %}checked{% endif %}>
-          Hierarchical
-        </label>
-      </div>
+      {% endfor %}
     </div>
     <div class="horizontal-flex" style="margin-top: 20px;">
       <div class="vertical-flex">
@@ -163,9 +121,9 @@
         <input type="number" name="kernel_size" id="kernel_size" value="{{settings_variables.kernelSize}}" form="post_form"/>
       </div>
       <div class="vertical-flex">
-        <label for="should_write">Save file</label>
-        <input type="checkbox" name="should_write" id="should_write" value="Hej" form="post_form" 
-        {% if settings_variables.should_write %}checked{% endif %} />
+        <label for="should_print">Save file</label>
+        <input type="checkbox" name="should_print" id="should_print" form="post_form" 
+        {% if settings_variables.should_print %}checked{% endif %} />
       </div>
     </div>
   </div>
