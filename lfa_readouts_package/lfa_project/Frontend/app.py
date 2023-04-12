@@ -9,7 +9,7 @@ from lfa_project.Main.GuiWorkFlowClient import GuiWorkFlowClient
 
 app = Flask(__name__)
 
-_config = ConfigReader()
+config = ConfigReader()
 client = None
 is_video = True
 frame = None
@@ -140,7 +140,7 @@ def post_data():
         variable = request.form['should_print']
     except:
         variable = None
-    _config.write_to_config("Print", "print", "True") if variable else _config.write_to_config("Print", "print", "False")
+    config.write_to_config("Print", "print", "True") if variable else config.write_to_config("Print", "print", "False")
     
 
     return redirect('/')
@@ -151,7 +151,7 @@ def write_if_not_null(section, name, options):
     except:
         variable = None
     if variable:
-        _config.write_to_config(section, name, variable)
+        config.write_to_config(section, name, variable)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -159,22 +159,22 @@ def index():
     global frame, is_video
     
     section = "FiltrationVariables"
-    x = _config.get_config_int(section, "expectedCentrumX")
-    y = _config.get_config_int(section, "expectedCentrumY")
-    max_dist = _config.get_config_int(section, "maxDistanceFromCentrum")
-    min_area = _config.get_config_int(section, "minAreaOfContour")
-    max_defect = _config.get_config_int(section, "maxDepthOfConvex")
+    x = config.get_config_int(section, "expectedCentrumX")
+    y = config.get_config_int(section, "expectedCentrumY")
+    max_dist = config.get_config_int(section, "maxDistanceFromCentrum")
+    min_area = config.get_config_int(section, "minAreaOfContour")
+    max_defect = config.get_config_int(section, "maxDepthOfConvex")
 
     section = "Implementations"
-    roi_extractor = _config.get_config_string(section, "iroiextractor")
-    white_balancer = _config.get_config_string(section, "iwhitebalancer")
-    contour_detector = _config.get_config_string(section, "icontourdetector")
-    contour_filtrator = _config.get_config_string(section, "icontourfiltrator")
-    contour_selector = _config.get_config_string(section, "icontourselector")
+    roi_extractor = config.get_config_string(section, "iroiextractor")
+    white_balancer = config.get_config_string(section, "iwhitebalancer")
+    contour_detector = config.get_config_string(section, "icontourdetector")
+    contour_filtrator = config.get_config_string(section, "icontourfiltrator")
+    contour_selector = config.get_config_string(section, "icontourselector")
     print(roi_extractor)
 
-    kernel_size = _config.get_config_int("ContourDetection", "kernelSize")
-    should_print = _config.get_config_boolean("Print", "print")
+    kernel_size = config.get_config_int("ContourDetection", "kernelSize")
+    should_print = config.get_config_boolean("Print", "print")
 
     b64_frame = None
     if frame is not None and not isinstance(frame, str):
