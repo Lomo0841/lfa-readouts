@@ -1,5 +1,6 @@
 from lfa_project.Interfaces.IWhiteBalancing import IWhiteBalancing
 import cv2 as cv
+import numpy as np
 
 class GreyWorld(IWhiteBalancing):
 
@@ -15,20 +16,17 @@ class GreyWorld(IWhiteBalancing):
         return balanced
 
     def _normalize(self, img):
-        lab_img = cv.cvtColor(img, cv.COLOR_BGR2LAB)
+        avg_b = np.mean(img[:, :, 0])
+        avg_g = np.mean(img[:, :, 1])
+        avg_r = np.mean(img[:, :, 2])
+    
+        grey_value = np.mean([avg_b, avg_g, avg_r])
+        scale_b = grey_value / avg_b
+        scale_g = grey_value / avg_g
+        scale_r = grey_value / avg_r
+        
+        img[:, :, 0] = np.clip(img[:, :, 0] * scale_b, 0, 255).astype(np.uint8)
+        img[:, :, 1] = np.clip(img[:, :, 1] * scale_g, 0, 255).astype(np.uint8)
+        img[:, :, 2] = np.clip(img[:, :, 2] * scale_r, 0, 255).astype(np.uint8)
 
-        l_mean, a_mean, b_mean, _ = cv.mean(lab_img)
-
-        l_scale = 128 / l_mean
-        a_scale = 128 / a_mean
-        b_scale = 128 / b_mean
-
-        lab_img[:, :, 0] = cv.multiply(lab_img[:, :, 0], l_scale)
-        lab_img[:, :, 1] = cv.multiply(lab_img[:, :, 1], a_scale)
-        lab_img[:, :, 2] = cv.multiply(lab_img[:, :, 2], b_scale)
-
-        balanced_img = cv.cvtColor(lab_img, cv.COLOR_LAB2BGR)
-
-        return balanced_img
-
-
+        return img

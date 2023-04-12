@@ -57,7 +57,7 @@ class Context():
         self._white_balancing_strategy = value
 
     def execute_roi_extractor_strategy(self):
-        return self._roi_extractor_strategy.extract_rois()
+        return self._roi_extractor_strategy.extract_roi()
     
     def execute_contour_detector_strategy(self):
         return self._contour_detector_strategy.detect_contours()

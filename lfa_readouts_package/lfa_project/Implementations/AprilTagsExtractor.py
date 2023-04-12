@@ -12,7 +12,7 @@ class AprilTagsExtractor(IRoiExtractor):
         #self.config = config
 
 
-    def extract_rois(self):
+    def extract_roi(self):
         #section = "CropRoi"
         #x = self.config.get_config_int(section, "x")
         #y = self.config.get_config_int(section, "y")
