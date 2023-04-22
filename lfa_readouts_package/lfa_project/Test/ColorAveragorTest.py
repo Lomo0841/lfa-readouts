@@ -23,9 +23,5 @@ class ColorAveragorTest(unittest.TestCase):
         #Assert
         self.assertAlmostEqual(average, (0.0, 255.0 ,0.0 ,0.0))
 
-        #cv.waitKey(0)
-
-        #cv.destroyAllWindows()
-
 if __name__ == '__main__':
     unittest.main()

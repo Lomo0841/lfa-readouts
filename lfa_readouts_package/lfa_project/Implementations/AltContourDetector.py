@@ -7,15 +7,12 @@ class AltContourDetector(IContourDetector):
         self._printer = printer
         self.image = image
         self._config = config
-        
 
     def detect_contours(self):
         section = "ContourDetection"
         kernel_size = self._config.get_config_int(section, "kernelSize")
 
         blurred_image = self._blur(self.image, kernel_size)
-
-        self._printer.write_image(blurred_image, "blurred")
 
         thresholded_image = self._threshold(blurred_image)
 

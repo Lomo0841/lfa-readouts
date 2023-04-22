@@ -1,14 +1,11 @@
-/* Global styles */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
-/* Set the font family for the body element */
 body {
   font-family: 'Open Sans',  sans-serif;
   margin: 0;
   padding: 0;
 }
 
-  /* Container styles */
   .container {
     display: flex;
     flex-direction: column;
@@ -18,7 +15,6 @@ body {
     background-color: #f7f7f7;
   }
 
-  /* Image and form container styles */
   .form-container {
     display: flex;
     align-items: center;
@@ -32,7 +28,6 @@ body {
     margin-bottom: 20px;
   }
 
-  /* Image styles */
   .image-container {
     flex: 1;
     display: flex;
@@ -42,7 +37,6 @@ body {
     position: relative; 
     height: 100%; 
   }
-
   
   .lfa-image {
     max-width: 100%;
@@ -51,9 +45,6 @@ body {
     border: 1px solid black;
   }
   
-  
-
-  /* Form styles */
   .form-group {
     flex: 1;
     display: flex;
@@ -200,9 +191,6 @@ body {
     
   }
 
-
-
-/* Modal container */
 .modal-container {
   display: none; /* Hide by default */
   position: fixed;
@@ -213,10 +201,8 @@ body {
   height: 100%;
   overflow: auto;
   background-color: rgba(0,0,0,0.4);
-
 }
 
-/* Modal content */
 .modal-content {
   background-color: #fff;
   margin: 10% auto;
@@ -235,7 +221,7 @@ body {
 }
 
 #settings-button img {
-  width: 20px; /* adjust the size of the SVG as needed */
+  width: 20px; 
   height: 20px;
 }
 

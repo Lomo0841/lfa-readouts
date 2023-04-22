@@ -17,7 +17,7 @@ class DeepSearch(IContourDetector):
         return all_contours
 
     def _analyse_histogram(self, image):
-        gray_scale = self._grey_scale(image)
+        gray_scale = self._gray_scale(image)
 
         histogram = cv.calcHist([gray_scale], [0], None, [256], [0, 256])
 
@@ -35,10 +35,10 @@ class DeepSearch(IContourDetector):
 
         blur = cv.GaussianBlur(image, (5, 5), 0)
 
-        grey_scale = self._grey_scale(blur)
+        gray_scale = self._gray_scale(blur)
 
         for i in range(min, max):
-            _, thresholded_image = cv.threshold(grey_scale, i, 255, cv.THRESH_BINARY)
+            _, thresholded_image = cv.threshold(gray_scale, i, 255, cv.THRESH_BINARY)
 
             contours, _ = cv.findContours(thresholded_image, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
@@ -49,9 +49,9 @@ class DeepSearch(IContourDetector):
 
         return flat_contours
 
-    def _grey_scale(self, image):
+    def _gray_scale(self, image):
         
-        grey_scale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+        gray_scale = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
-        return grey_scale
+        return gray_scale
               

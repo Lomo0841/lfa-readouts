@@ -5,7 +5,6 @@ class Context():
         self._contour_detector_strategy = None
         self._contour_filtrator_strategy = None
         self._contour_selector_strategy = None
-        self._result_translator_strategy = None
         self._white_balancing_strategy = None
 
     @property
@@ -23,10 +22,6 @@ class Context():
     @property
     def contour_selector_strategy(self):
         return self._contour_selector_strategy
-    
-    @property
-    def result_translator_strategy(self):
-        return self._result_translator_strategy
     
     @property
     def white_balancing_strategy(self):
@@ -48,10 +43,6 @@ class Context():
     def contour_selector_strategy(self, value):
         self._contour_selector_strategy = value
 
-    @result_translator_strategy.setter
-    def result_translator_strategy(self, value):
-        self._result_translator_strategy = value
-
     @white_balancing_strategy.setter
     def white_balancing_strategy(self, value):
         self._white_balancing_strategy = value
@@ -68,8 +59,5 @@ class Context():
     def execute_contour_selector_strategy(self):
         return self._contour_selector_strategy.select_contour()
 
-    def execute_result_translator_strategy(self):
-        return self._result_translator_strategy.translate_result()
-    
     def execute_white_balancing_strategy(self):
         return self._white_balancing_strategy.white_balance()

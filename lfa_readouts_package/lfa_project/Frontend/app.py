@@ -5,7 +5,7 @@ import base64
 
 from lfa_project.Utility.ConfigReader import ConfigReader
 from lfa_project.Main.GuiClient import GuiClient
-from lfa_project.Main.GuiWorkFlowClient import GuiWorkFlowClient
+
 
 app = Flask(__name__)
 
@@ -14,19 +14,25 @@ client = None
 is_video = True
 frame = None
 
-# https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00
+""" 
+Title: Video Streaming in Web Browsers with OpenCV & Flask
+Author: Nakul Lakhotia
+Date: 20/10 2020
+Located: 22/4 2023
+URL: https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00 
+"""
 def gen_frames():  
     global is_video, frame
     camera = cv.VideoCapture(0)
 
     while True:
-        _, frame = camera.read()  # read the camera frame
+        _, frame = camera.read()
         if is_video:
-            
+            #encode a frame from OpenCV as a PNG image and yields it as a byte string with a MIME message format.
             _, encoded_frame = cv.imencode('.png', frame)
             byteFrame = encoded_frame.tobytes()
             yield (b'--byteFrame\r\n'
-                    b'Content-Type: image/png\r\n\r\n' + byteFrame + b'\r\n')  # iterate over all bytes and concatenate
+                    b'Content-Type: image/png\r\n\r\n' + byteFrame + b'\r\n')
         else:
             camera.release()
             print("camera released")
@@ -43,7 +49,7 @@ def cap_image():
     global is_video, frame, client
     is_video = False
     try:
-        client = GuiWorkFlowClient(frame)
+        client = GuiClient(frame)
         frame = client.find_roi()
         return redirect('/')
     except Exception as e:
@@ -51,25 +57,23 @@ def cap_image():
         client = None
         return redirect(url_for('error', error_message=e))
     
+
 @app.route('/load_image', methods=['POST']) 
 def load_image():
     global is_video, frame, client
     is_video = False
-    # file = request.files['file']
     encoded_image = request.files['file'].read()
     np_image = np.frombuffer(encoded_image, np.uint8)
 
     frame = cv.imdecode(np_image, cv.IMREAD_COLOR)
     try:
-        client = GuiWorkFlowClient(frame)
+        client = GuiClient(frame)
         frame = client.find_roi()
         return redirect('/')
     except Exception as e:
         print(e)
         client = None
         return redirect(url_for('error', error_message=e))
-
-
 
 
 @app.route('/run_algorithm') 
@@ -97,9 +101,9 @@ def result(red, green, blue):
     b64_frame = None
     if frame is not None and not isinstance(frame, str):
         _, encoded_frame = cv.imencode('.png', frame)
-        # BAD ENCODING! Maybe use tobytes as well?
         b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
     return render_template('result-page.html', input_image=b64_frame, red=red, green=green, blue=blue)
+
 
 @app.route('/error/<error_message>')
 def error(error_message):
@@ -107,11 +111,13 @@ def error(error_message):
     is_video = True
     return  render_template('error-page.html', error_message=error_message)
 
+
 @app.route('/reset')
 def reset():
     global is_video
     is_video = True
     return redirect('/')
+
 
 @app.route('/post_data', methods=['POST'])
 def post_data():
@@ -135,6 +141,7 @@ def post_data():
     write_if_not_null(section, "iContourSelector", "SelectorOptions")
 
     write_if_not_null("ContourDetection", "kernelsize", "kernel_size")
+
     #Special handling of writing to config file whether we should save results locally
     try:
         variable = request.form['should_print']
@@ -222,6 +229,6 @@ def index():
     
     return render_template('main-page.html', input_image=b64_frame, is_video=is_video, implementations = implementation_options, settings_variables=settings_variables)
 
+
 if __name__ == "__main__":
-    host_ip = '10.209.173.87'
     app.run(debug=True)

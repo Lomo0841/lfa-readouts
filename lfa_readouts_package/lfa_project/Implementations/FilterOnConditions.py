@@ -27,9 +27,6 @@ class FilterOnConditions(IContourFiltrator):
 
         centroid_distance_filtered = self._centroid_distance_filter(convexity_defect_filtered, expected_centrum_x, expected_centrum_y, max_distance_from_centrum)
 
-        #Do we need this?
-        #pointFiltered = self.pointFilter(convexityDefectFiltered, points)
-
         self._printer.write_image(self._image, "FilteredContours", centroid_distance_filtered)
 
         return centroid_distance_filtered

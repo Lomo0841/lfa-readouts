@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block body %}
-  <!-- UI: https://sites.google.com/site/prakashbebington/multimedia-development-resources/gui-design-principles -->
   <div class="container">
     <div class="form-container">
       <div class="image-container">
@@ -21,7 +20,6 @@
             <img src="{{ url_for('static', filename='assets/camera_icon.svg') }}" alt="Camera icon">
             Capture Image
           </button>
-          <!-- <button type="submit" form="load_form">Choose Image File</button> -->
           <input type="file" name="file" id="file_input" accept="image/*" style="display:none" form="load_form" />
           <button type="button" onclick="document.getElementById('file_input').click()">
             <img src="{{ url_for('static', filename='assets/folder_icon.svg') }}" alt="Folder icon">
@@ -40,8 +38,6 @@
         </div>
         {% endif %}
       </div>
-
-      <!-- https://stackoverflow.com/questions/379610/can-you-nest-html-forms -->
       
       <form id="post_form"  method="POST" action="{{ url_for('post_data') }}"></form>
       <form id="algo_form" method="GET" action="{{ url_for('run_algorithm') }}"></form> 
@@ -49,7 +45,6 @@
       <div class="form-group">
         <div class="header-group">
           <h2>Calibrate Filters</h2>
-          <!-- Button to trigger modal -->
           <button id="settings-button">
             <img src="{{ url_for('static', filename='assets/gear_icon.svg') }}" alt="Settings icon">
           </button>

@@ -14,8 +14,6 @@ class BlurThresholdContourDetector(IContourDetector):
 
         blurred_image = self._blur(self._image, kernel_size)
 
-        self._printer.write_image(blurred_image, "blurred")
-
         thresholded_image = self._threshold(blurred_image)
 
         self._printer.write_image(thresholded_image, "ThresholdedImage")

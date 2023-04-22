@@ -36,7 +36,6 @@ class Printer():
 
             cv.imwrite(img_path, image)
         
-        
     def write_file(self, message):
         if self.do_print:
             with open(self.txt_path, "a") as f:

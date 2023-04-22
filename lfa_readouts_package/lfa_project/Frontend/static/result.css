@@ -1,14 +1,11 @@
-/* Global styles */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
-/* Set the font family for the body element */
 body {
   font-family: 'Open Sans',  sans-serif;
   margin: 0;
   padding: 0;
 }
 
-  /* Container styles */
   .back-container {
     display: flex;
     flex-direction: column;
@@ -18,7 +15,6 @@ body {
     background-color: #f7f7f7;
   }
 
-  /* Image and form container styles */
   .front-container {
     display: flex;
     align-items: center;
@@ -33,7 +29,6 @@ body {
     margin-bottom: 20px;
   }
 
-  /* Image styles */
   .image-container {
     flex: 1;
     display: flex;
@@ -53,7 +48,6 @@ body {
     border: 1px solid black;
   }
 
-  /* Form styles */
   .result-group {
     flex: 1;
     display: flex;
@@ -72,7 +66,6 @@ body {
     top: 0; 
   }
   
-  /* Result text styles */
   .result-group p {
     font-size: 1.2rem;
     margin: 2px;

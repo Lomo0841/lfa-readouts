@@ -13,14 +13,13 @@ from lfa_project.Implementations.MaxRGB import MaxRGB
 from lfa_project.Utility.Printer import Printer
 from lfa_project.Utility.ConfigReader import ConfigReader
 
-image_name = "green.png"
+image_name = "orange_dot.png"
 
 if platform.system() == 'Windows':
-    input_image = cv.imread("lfa_readouts_package\lfa_project\Images\TwoLeds\\" + image_name)
+    input_image = cv.imread("lfa_readouts_package\lfa_project\Images\memory_and_time_samples\\" + image_name)
 else:
-    input_image = cv.imread("lfa_readouts_package/lfa_project/Images/TwoLeds/" + image_name)
+    input_image = cv.imread("lfa_readouts_package/lfa_project/Images/memory_and_time_samples/" + image_name)
 
-#Setting up
 context = Context()
 
 config = ConfigReader()
@@ -51,20 +50,20 @@ elif white_balancer_choice == "None":
 
 if contour_detector_choice == "BlurThresholdContourDetector":
     context.contour_detector_strategy = BlurThresholdContourDetector(printer, config, white_balanced.copy())
-    _contours = context.execute_contour_detector_strategy()
+    contours = context.execute_contour_detector_strategy()
 elif contour_detector_choice == "AltContourDetector":
     context.contour_detector_strategy = AltContourDetector(printer, config, white_balanced.copy())
-    _contours = context.execute_contour_detector_strategy()
+    contours = context.execute_contour_detector_strategy()
 
 if contour_filtrator_choice == "FilterOnConditions":
-    context.contour_filtrator_strategy = FilterOnConditions(printer, config, white_balanced.copy(), _contours)
+    context.contour_filtrator_strategy = FilterOnConditions(printer, config, white_balanced.copy(), contours)
     filtrated_contours = context.execute_contour_filtrator_strategy()
 
 if len(filtrated_contours) == 0:
     context.contour_detector_strategy = DeepSearch(printer, white_balanced.copy())
-    _contours = context.execute_contour_detector_strategy()
+    contours = context.execute_contour_detector_strategy()
 
-    context.contour_filtrator_strategy = FilterOnConditions(printer, config, white_balanced.copy(), _contours)
+    context.contour_filtrator_strategy = FilterOnConditions(printer, config, white_balanced.copy(), contours)
     filtrated_contours = context.execute_contour_filtrator_strategy()
 
 if contour_selector_choice == "HierarchicalSelector":

@@ -17,6 +17,6 @@ class ColorAveragor():
 
         avg_color = cv.mean(masked_image, mask=mask)
 
-        self._printer.write_file("RGB:" + str(avg_color))
+        self._printer.write_file("RGB: (" + str(avg_color[2]) + ", " + str(avg_color[1]) + ", " + str(avg_color[0]) + ")")
 
         return avg_color
