@@ -178,7 +178,6 @@ def index():
     contour_detector = config.get_config_string(section, "icontourdetector")
     contour_filtrator = config.get_config_string(section, "icontourfiltrator")
     contour_selector = config.get_config_string(section, "icontourselector")
-    print(roi_extractor)
 
     kernel_size = config.get_config_int("ContourDetection", "kernelSize")
     should_print = config.get_config_boolean("Print", "print")
