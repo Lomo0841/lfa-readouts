@@ -31,13 +31,6 @@ class FilterOnConditions(IContourFiltrator):
 
         return centroid_distance_filtered
 
-    def _point_filter(self, contours, points):
-        filtered_contours = []
-        for cnt in contours:
-            if all(cv.pointPolygonTest(cnt, p, measureDist=False) >= 0 for p in points):
-                filtered_contours.append(cnt)
-        return filtered_contours
-
     def _area_filter(self, contours, min_area):
         filtered_contours = []
         
@@ -76,6 +69,7 @@ class FilterOnConditions(IContourFiltrator):
             try:
                 self._defect_check(max_depth, filtered_contours, cnt, hull)
             except:
+                #If contour is not monotonous, sort the contour points
                 hull[::-1].sort(axis=0)
                 self._defect_check(max_depth, filtered_contours, cnt, hull)
 
@@ -85,6 +79,7 @@ class FilterOnConditions(IContourFiltrator):
         defects = cv.convexityDefects(cnt, hull)
 
         if defects is not None and len(defects) > 0:
+            #Divide by 2^8 to account for the ratio applied by OpenCV
             max_defect = np.max(defects[:, 0, 3])/256
 
             if max_defect <= max_depth:
@@ -99,9 +94,15 @@ class FilterOnConditions(IContourFiltrator):
         c_y = 0
 
         for cnt in contours: 
+            """ 
+            Title: OpenCV center of contour
+            Author: Adrian Rosebrock
+            Date: 1/2 2016
+            Located: 22/4 2023
+            URL:  https://pyimagesearch.com/2016/02/01/opencv-center-of-contour/
+            """
+            #Computing contour center as above source
             m = cv.moments(cnt)
-        
-
             if m['m00'] != 0:
                 c_x = int(m['m10']/m['m00'])
                 c_y = int(m['m01']/m['m00'])

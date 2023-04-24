@@ -21,6 +21,7 @@ Date: 20/10 2020
 Located: 22/4 2023
 URL: https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00 
 """
+#Generating live video feed as in above source
 def gen_frames():  
     global is_video, frame
     camera = cv.VideoCapture(0)
@@ -62,10 +63,12 @@ def cap_image():
 def load_image():
     global is_video, frame, client
     is_video = False
+
+    #Load an image and decode it to OpenCV format
     encoded_image = request.files['file'].read()
     np_image = np.frombuffer(encoded_image, np.uint8)
-
     frame = cv.imdecode(np_image, cv.IMREAD_COLOR)
+
     try:
         client = GuiClient(frame)
         frame = client.find_roi()
@@ -187,6 +190,7 @@ def index():
         _, encoded_frame = cv.imencode('.png', frame)
         b64_frame = base64.b64encode(encoded_frame).decode('utf-8')
 
+    #Dictionary containing the data of radio buttons in modal
     implementation_options = [
         {"step": "Roi Extractor", 
          "group": "RoiOptions",

@@ -25,6 +25,7 @@ class GreyWorld(IWhiteBalancing):
         scale_g = grey_value / avg_g
         scale_r = grey_value / avg_r
         
+        #Applying the scales to all pixels
         img[:, :, 0] = np.clip(img[:, :, 0] * scale_b, 0, 255).astype(np.uint8)
         img[:, :, 1] = np.clip(img[:, :, 1] * scale_g, 0, 255).astype(np.uint8)
         img[:, :, 2] = np.clip(img[:, :, 2] * scale_r, 0, 255).astype(np.uint8)

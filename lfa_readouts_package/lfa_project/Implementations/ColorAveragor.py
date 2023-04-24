@@ -9,10 +9,11 @@ class ColorAveragor():
         self._contour = contour
 
     def average_color(self):
+        #Create an image of just the contour, with fill
         mask = np.zeros(self._image.shape[:2], np.uint8)
-
         cv.drawContours(mask, [self._contour], 0, 255, -1)
 
+        #Extract all the pixels inside the contour
         masked_image = cv.bitwise_and(self._image, self._image, mask=mask)
 
         avg_color = cv.mean(masked_image, mask=mask)

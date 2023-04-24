@@ -18,6 +18,7 @@ if (fileInput){
     });
 }
 
+//Add drawing functionality to input fields
 addDrawOnEnter(document.getElementById("center_x"))
 addDrawOnEnter(document.getElementById("center_y"))
 addDrawOnEnter(document.getElementById("min_area"))
@@ -38,6 +39,7 @@ document.getElementById("kernel_size").addEventListener("keypress", function(eve
             
 var image = document.getElementById('lfa_image');
 if(image){
+    //Set x- and y-variables to the coordinate clicked by the user
     image.addEventListener('click', function(event) {
         var x = event.offsetX;
         var y = event.offsetY;
@@ -53,6 +55,7 @@ function drawOnImage(imageUrl, centerX, centerY) {
     var image = new Image();
     image.src = imageUrl; 
 
+    //Wait for the image to load, then insert the image on a canvas and draw on the canvas
     image.onload = function() {
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');

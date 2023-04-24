@@ -16,6 +16,7 @@ class DeepSearch(IContourDetector):
 
         return all_contours
 
+    #Find the minimum and maximum index of non-zero values in the histogram
     def _analyse_histogram(self, image):
         grey_scale = self._grey_scale(image)
 

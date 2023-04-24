@@ -48,6 +48,7 @@ class AprilTagsExtractor(IRoiExtractor):
         Located: 22/4 2023
         URL: https://theailearner.com/tag/cv2-warpperspective/ 
         """
+        #Dewarping the image as in above source
         width_upper = np.sqrt(((upper_left[0] - upper_right[0]) ** 2) + ((upper_left[1] - upper_right[1]) ** 2))
         width_lower = np.sqrt(((lower_left[0] - lower_right[0]) ** 2) + ((lower_left[1] - lower_right[1]) ** 2))
         max_width = max(int(width_upper), int(width_lower))
