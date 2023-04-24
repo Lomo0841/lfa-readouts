@@ -12,7 +12,7 @@
 3. Navigate to the Git project folder:
 
    ```
-   cd lfa-readouts
+   cd lfa-readouts-main
    ```
 
 4. Install the project package using pip:
