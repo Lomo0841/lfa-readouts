@@ -1,7 +1,5 @@
 # LFA Readouts
 
-This project provides a web interface for analyzing LFAs.
-
 ## Setup
 
 1. Install Python 3 from the [official website](https://www.python.org/downloads/).
